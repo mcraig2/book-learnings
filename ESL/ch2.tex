@@ -101,4 +101,45 @@ of the training set.}
 
 }
 
+\exercise[]{
+\textbf{(a) Derive equation (2.27)}
+
+(a) Equation (2.27) states
+
+\begin{align}
+EPE(x_0) & = E_{y_0|x_0} E_{\tau} (y_0 - \hat{y}_0)^2 \\
+         & = Var(y_0 | x_0) + E_{\tau} [\hat{y}_0 - E_{\tau} \hat{y}_0]^2 + [E_{\tau} \hat{y}_0 - x_0^T\beta]^2 \\
+         & = Var(y_0 | x_0) + Var_{\tau}(\hat{y}_0) + Bias^2(\hat{y}_0) \\
+         & = \sigma^2 + E_{\tau} x_0^T (\mathbf{X}^T\mathbf{X})^{-1} x_0\sigma^2 + 0^2.
+\end{align}
+
+We can derive this is in the three constituent parts shown. Let's start with
+the bias squared term. Since we know that the least squares estimator is an
+unbiased estimator with respect to the training set, it is obvious that
+
+$$[E_{\tau} \hat{y}_0 - x_0^T\beta]^2 = [x_0^T\beta - x_0^T\beta]^2 = 0^2$$
+
+So, the bias term is zero. Next, we will look at the middle term. Note that
+for the least squares solution $\hat{\beta}$,
+$Var(\hat{\beta}) = (\mathbf{X}^T\mathbf{X})^{-1} \sigma^2$. So,
+
+\begin{align}
+Var_{\tau}(\hat{y}_0) & = Var_{\tau}(x_0^T\hat{\beta}) \\
+     & = x_0^2Var(\hat{\beta}) \\
+     & = E_{\tau} x_0^T (\mathbf{X}^T\mathbf{X})^{-1} x_0\sigma^2
+\end{align}
+
+Finally, it is clear that $Var(y_0 | x_0) = \sigma^2$, since this is how we
+define $\sigma^2$.
+
+(b) Equation (2.28) states
+
+\begin{align}
+E_{x_0}EPE(x_0) & \sim E_{x_0} x_0^TCov(X)^{-1}x_0\sigma^2 / N + \sigma^2 \\
+                & = trace[Cov(X)^{-1}Cov(x_0)]\sigma^2 / N + \sigma^2 \\
+                & = \sigma^2(p / N) + \sigma^2
+\end{align}
+
+}
+
 \exerciseshere
