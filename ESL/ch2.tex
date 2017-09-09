@@ -46,8 +46,41 @@ $k = arg\,max_k\,\hat{y_k}$.
 }
 
 \exercise[]{
-Show how to compute the Bayes decision boundary for the simulation example
-in Figure 2.5.
+\textbf{Show how to compute the Bayes decision boundary for the simulation
+example in Figure 2.5.}
+
+Note that in the example in Figure 2.5, we have defined ($BLUE = 0$,
+$ORANGE = 1$), so this can be considered a binary choice, where the Bayes
+decision boundary can be defined by:
+
+$$\hat{f}(X) = E(Y|X) = Pr(G = G_1 | X) = Pr(ORANGE | X)$$
+
+if $G_1$ corresponds to $Y = 1$. Since we know the structural model that
+generated this example, we can compute this. Note that
+
+$$Pr(ORANGE | X) = \frac{1}{10}\sum_{i=0}^{10} g_i(x)$$
+
+where $g_i(x) = N(\mu_i, I/5)$, where $\mu_i$ is one of the means generated
+during the generation process. Since these Gaussians are all i.i.d, we can
+write this mixture as:
+
+\begin{align}
+    Pr(ORANGE | X) & = Pr(N(\mu_1 + \cdots + \mu_{10}, 10I/5) = X) \\
+                   & = Pr(N(|| \mu ||, 2I) = X) \\
+                   & = \frac{1}{(2\pi)^{p/2}}|\Sigma|^{1/2} exp\{-\frac{1}{2} (x - ||\mu||)^T\Sigma^{-1}(x-||\mu||)\} \\
+                   & = \frac{\sqrt{2}}{(2\pi)^{p/2}} exp\{-\frac{1}{4} (x - ||\mu||)^T(x-||\mu||)\} \\
+                   & = \frac{\sqrt{2}}{(2\pi)^{p/2}} exp\{-\frac{1}{4} (x^Tx - ||\mu||^2)\}
+\end{align}
+
+where $\mu$ is the mean of the Gaussians that make up the $ORANGE$ class.
+Now, we can plug in the Gaussians that make up the $\mu$ vector. Note that
+$\mu$ itself is a product of a Gaussian pdf. So, the distribution of $||\mu||$
+is given by:
+
+$$Pr(||\mu||) = \sum_{i=0}^{10}N((0, 1)^T, I) = N((0, 10)^T, 10I)$$
+
+Plugging in the normal pdf above into the previous equation is tedious, but
+can be done and has a closed solution.
 }
 
 \exercise[]{
@@ -158,6 +191,36 @@ Note that since the $X$s are i.i.d, we can get from the first line to the
 second line. The third line is true because $Cov(x_0)$ is a scalar, and
 the fourth line is because of the cyclic property of traces.
 
+}
+
+\exercise[]{
+\textbf{Consider a regression problem with inputs $x_i$ and outputs $y_i$, and
+a parameterized model $f_\theta(x)$ to be fit by least squares. Show that if
+there are observations with \textit{tied} or \textit{identical} values of
+$x$, then the fit can be obtained from a reduced weighted least squares
+problem.}
+
+For a linear model fit with least squares, the loss function is defined as:
+
+\begin{align}
+    L(y, \hat{y}) & = E(y - \hat{y})^2 \\
+                  & \approx \frac{1}{N} \sum_{i=0}^{N} (y_i - \hat{y}_i)^2 \\
+                  & = \frac{1}{N} \sum_{i=0}^{N} (y_i - \beta^TX_i)^2
+\end{align}
+
+For a given model (i.e. conditioning on $\beta$), this quantity in the
+summation is a function of $X$ (assuming no noise in $y$). Therefore, if we
+receive $k$ instances of some value of $X$, this is equivalent to having $k$
+instances of this loss in the loss function. To show this, let $k$ values
+be the same $X_i$:
+
+\begin{align}
+    L(y, \hat{y}) & = \frac{1}{k} \sum_{i=0}^{k} (y_i - \beta^TX_i)^2 + \frac{1}{N-k} \sum_{j=0; j \neq i}^{N-k} (y_j - \beta^TX_j)^2 \\
+                  & = k(y_i - \beta^TX_i)^2 + \frac{1}{N-k} \sum_{j=0;j \neq i}^{N-k} (y_j - \beta^TX_j)^2
+\end{align}
+
+Therefore, this is equivalent to a weighted squares solution, where $X_i$ is
+given a weight of $k$ and every other point is given a weight of $1$.
 }
 
 \exerciseshere
