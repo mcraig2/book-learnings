@@ -140,6 +140,24 @@ E_{x_0}EPE(x_0) & \sim E_{x_0} x_0^TCov(X)^{-1}x_0\sigma^2 / N + \sigma^2 \\
                 & = \sigma^2(p / N) + \sigma^2
 \end{align}
 
+To derive this, we have to show that
+
+$$E_{x_0} x_0^TCov(X)^{-1}x_0 = trace[Cov(X)^{-1}Cov(x_0)]$$
+
+To do this,
+
+\begin{align}
+E_{x_0}x_0^TCov(X)^{-1}x_0 & = E_{x_0}Cov(x_0^TX^{-1}, x_0^TX^{-1}) \\
+                           & = E_{x_0}Cov(x_0)Cov(X)^{-1} \\
+                           & = trace[Cov(x_0)Cov(X)^{-1}] \\
+                           & = trace[Cov(X)^{-1}Cov(x_0)]
+\end{align}
+
+The first line is evident through the linearity of the covariance matrix.
+Note that since the $X$s are i.i.d, we can get from the first line to the
+second line. The third line is true because $Cov(x_0)$ is a scalar, and
+the fourth line is because of the cyclic property of traces.
+
 }
 
 \exerciseshere
