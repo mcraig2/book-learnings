@@ -1,0 +1,41 @@
+\documentclass{article}
+\usepackage{amsthm, amssymb, amsmath}
+
+\theoremstyle{remark}
+\newtheorem{ExInternal}{Exercise}[section]
+
+\makeatletter
+\let\@exercises\@empty%
+\newcommand\exercise[2][]{%
+    \g@addto@macro\@exercises{%
+        \begin{ExInternal}[#1]%
+            #2%
+        \end{ExInternal}%
+    }%
+}
+
+\newcommand\exerciseshere{%
+    \subsection*{Exercises}
+    \@exercises%
+    \global\let\@exercises\@empty%
+}
+
+\makeatother
+\begin{document}
+
+\title{Selected Exercises of Machine Learning: A Probabilistic Perspective}
+\author{Mike Craig}
+\date{Last Updated \today}
+
+\maketitle
+
+\section{Introduction}
+
+This is a collection of certain exercise solutions I did as I was reading
+through this book. As I am not a mathematician, the "proofs" listed here
+are rough and probably not rigorous. They only serve as a means to explain
+the concepts in a way that aids my own understanding.
+
+\include{ch2}
+
+\end{document}

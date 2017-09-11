@@ -1,0 +1,112 @@
+\section{Probability}
+
+\exercise[]{
+\textbf{
+My neighbor has two children. Assuming that the gender of a child is
+like a coin flip, it is most likely, a priori, that my neighbor has one boy
+and one girl, with probability 1/2. The other possibilities, two boys
+or two girls, have probabilities 1/4 and 1/4. \\ \\
+a. Suppose I ask him whether he has any boys, and he says yes. What is the
+probability that one child is a girl? \\ \\
+b. Suppose instead that I happen to see one of his children run by, and it is
+a boy. What is the probability that the other child is a girl?}
+
+a. Let $G$ represent one girl, and $B$ represent one boy. Since the neighbor
+has two children, we can state the entire sample space:
+
+$$S = \{BB, BG, GB, GG\}$$
+
+When the neighbor answers the question, this changes our beliefs about the
+other child. Using Bayes' theorem:
+
+\begin{align}
+    P(G = 1 | B \geq 1) & = \frac{P(B \geq 1 | G = 1) P(G = 1)}{P(B \geq 1)} \\
+                        & = \frac{2/2 \times 1/2}{3/4} \\
+                        & = \frac{2}{3}
+\end{align}
+
+b. If we instead happen to see one of his children, this is a different way
+of looking at the problem. In this situation, learning the gender of one child
+tells us nothing about the gender of the other child. Therefore, the gender of
+the second child is a coin flip, $1/2$.
+
+}
+
+\exercise[]{
+\textbf{
+Suppose a crime has been committed. Blood is found at the scene for which there
+is no innocent explanation. It is of a type which is present in 1\% of the
+population. \\ \\
+a. The prosecutor claims: "There is a 1\% chance that the defendant would have
+the crime blood type if he were innocent. Thus there is a 99\% chance that he
+is guilty". This is known as the prosecutor's fallacy. What is wrong with this
+argument? \\ \\
+b. The defender claims: "The crime occurred in a city of 800,000 people. The
+blood type would be found in approximately 8000 people. The evidence has
+provided a probability of just 1 in 8000 that the defendant is guilty, and
+thus has no relevance". This is known as the defender's fallacy. What is wrong
+with this argument?}
+
+a. The defendant sharing the blood type does not mean that the defendant
+himself has a 99\% probability of being guilty, just that he shares the same
+blood type as the guilty party, just like he shares the same blood type with
+1\% of the population. In a large enough city, there would be a large number
+of people fitting this description in a small geographical radius.
+
+b. This statement assumes that the defendent is just as guilty (or just as
+non-guilty) as anyone else in that group of 8000 people. If there truly is
+no other evidence to tie this defendent to this crime, then that may be so,
+but if there were any other evidence (drives a similar car as the criminal,
+lives in the same area, or frequents the same locations), the probability
+that the defendant is guilty could be much higher.
+}
+
+\exercise[]{
+\textbf{Show that the variance of a sum is $Var[X + Y] = Var[X] + Var[Y] + 2Cov[X,Y]$,
+where $Cov[X, Y]$ is the covariance between $X$ and $Y$.}
+
+\begin{align}
+    & Var[X] + Var[Y] + 2Cov[X, Y] = E[(X - \mu_x)^2] + E[(Y - \mu_y)^2] + 2E[(X - \mu_x)(Y - \mu_y)] \\
+    & = E[X^2 - 2X\mu_x + \mu_x^2] + E[Y^2 - 2Y\mu_y + \mu_y^2] + E[2XY - 2X\mu_y - 2Y\mu_x + 2\mu_x\mu_y] \\
+    & = E[X^2 - 2X\mu_x + \mu_x^2 + Y^2 - 2Y\mu_y + \mu_y^2 + 2XY - 2X\mu_y - 2Y\mu_x + 2\mu_x\mu_y] \\
+    & = E[X^2 + 2XY - 2X(\mu_x + \mu_y) + Y^2 - 2Y(\mu_x + \mu_y) + 2\mu_x\mu_y]
+\end{align}
+
+Note that $E(X + Y) = E(X) + E(Y) = \mu_x + \mu_y = \mu_{xy}$. Given this,
+
+\begin{align}
+    & E[X^2 + 2XY - 2X(\mu_x + \mu_y) + Y^2 - 2Y(\mu_x + \mu_y) + 2\mu_x\mu_y] \\
+    & = E[X^2 + 2XY - 2X\mu_{xy} + Y^2 - 2Y\mu_{xy} + 2\mu_x\mu_y] \\
+    & = E[(X + Y - \mu_{xy})^2] \\
+    & = Var[X + Y]
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{After your yearly checkup, the doctor has bad news and good news. The
+bad news is that you tested positive for a serious disease, and that the test
+is 99\% accurate (i.e., the probability of testing positive given that you have
+the disease is 0.99, as is the probability of testing negative given that you
+don't have the disease). The good news is that this is a rare disease, striking
+only one in 10,000 people. What are the chances that you actually have the
+disease? (Show your calculations as well as giving the final result.)}
+
+Since the test is 99\% accurate, we know that $P(Y | D) = P(N | ~D) = 0.99$,
+where $Y$ means a positive test result, $N$ a negative test result, $D$ means
+you have the disease, and $~D$ means you do not have the disease. We also know
+the prior probability of having the disease: $P(D) = 0.0001$. Using Bayes'
+rule:
+
+\begin{align}
+    P(D | Y) & = \frac{P(Y | D)P(D)}{P(Y)} \\
+             & = \frac{0.99 \times 0.0001}{P(Y | D)P(D) + P(Y | ~D)P(~D)} \\
+             & = \frac{0.000099}{(0.99 \times 0.0001) + (0.01 \times 0.9999)} \\
+             & = \frac{0.000099}{0.000099 + 0.009999} \\
+             & = 0.0098
+\end{align}
+
+So, there's about a 1\% chance that you have the disease even though you tested
+positive for it.
+
+\exerciseshere
