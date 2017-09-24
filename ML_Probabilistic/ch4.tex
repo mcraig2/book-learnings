@@ -1,0 +1,248 @@
+\section{Gaussian Models}
+
+\exercise[]{
+\textbf{Let $X \sim U(−1, 1)$ and $Y = X^2$. Clearly $Y$ is dependent on $X$
+(in fact, $Y$ is uniquely determined by $X$). However, show that
+$\rho(X,Y) = 0$. Hint: if $X \sim U(a, b)$ then $E[X]=(a + b)/2$ and
+$var[X]=(b − a)^2/12$.}
+
+Let's plug things into the definition of correlation:
+
+\begin{align}
+    \rho(X,Y) & = \frac{cov(X,Y)}{\sigma_X\sigma_Y} \\
+              & = \frac{E[XY] - E[X]E[Y]}{\sigma_X\sigma_Y} \\
+              & = \frac{E[X^3] - E[X]E[X^2]}{\sigma_X\sigma_{X^2}}
+\end{align}
+
+Note that to show this equals $0$, we just have to show that the numerator
+is equal to $0$. To do this, we will compute each term:
+
+$$E[X^3] = \frac{1}{2} \int_{-1}^{1} u^3p(u)du = 0$$
+
+$$E[X^2] = \frac{1}{2} \int_{-1}^{1} u^2p(u)du = \frac{1}{3}$$
+
+$$E[X] = \frac{-1 + 1}{2} = 0$$
+
+So we have
+
+\begin{align}
+    \rho(X,Y) & = \frac{E[X^3] - E[X]E[X^2]}{\sigma_X\sigma_{X^2}} \\
+              & = \frac{0 - 0\times \frac{1}{3}}{\sigma_X\sigma_{X^2}} \\
+              & = 0
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Let $X \sim N(0,1)$ and $Y = WX$, where $p(W = −1) = p(W = 1) = 0.5$.
+It is clear that $X$ and $Y$ are not independent, since $Y$ is a function of $X$. \\
+a. Show that $Y \sim N(0,1)$.}
+
+So, $W$ randomly changes the sign half the time on $X$. Thus,
+
+$$Y \sim \frac{1}{2} N(0,1) - \frac{1}{2} N(0,1)$$
+
+Let's write the distribution out for this:
+
+\begin{align}
+    p(Y|\mu,\sigma^2) & = \frac{1}{\sqrt{2\pi \sigma^2}}
+                          e^{-\frac{(WX-\mu)^2}{2\sigma^2}} \\
+    & = \frac{1}{2\sqrt{2\pi \sigma^2}}e^{-\frac{(-X-\mu)^2}{2\sigma^2}} +
+        \frac{1}{2\sqrt{2\pi \sigma^2}}e^{-\frac{(X-\mu)^2}{2\sigma^2}} \\
+    & = \frac{1}{2\sqrt{2\pi}}e^{-\frac{(-X)^2}{2}} +
+        \frac{1}{2\sqrt{2\pi}}e^{-\frac{X^2}{2}} \\
+    & = \frac{1}{2\sqrt{2\pi}}\left ( e^{-\frac{X^2}{2}} + e^{-\frac{X^2}{2}} \right ) \\
+    & = \frac{1}{2\sqrt{2\pi}}\left ( 2e^{-\frac{X^2}{2}} \right ) \\
+    & = \frac{1}{\sqrt{2\pi}}e^{-\frac{X^2}{2}} \\
+    & = N(0,1)
+\end{align}
+
+\textbf{b. Show that $cov[X,Y]=0$.}
+
+\begin{align}
+    cov[X,Y] & = E[XY] - E[X]E[Y] \\
+             & = E[E[XY|W]] - E[X]E[WX] \\
+             & = \frac{1}{2}E[X^2] + \frac{1}{2}E[-X^2] - E[X]E[WX] \\
+             & = \frac{1}{2}E[X^2] + \frac{1}{2}E[X^2] - E[X]E[WX] \\
+             & = E[X^2] - E[X](\frac{1}{2}E[^2]+\frac{1}{2}E[-X^2]) \\
+             & = E[X^2] - E[X^2] \\
+             & = 0
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Prove that $-1 \leq \rho(X,Y) \leq 1$}
+
+$$\rho(X,Y) = \frac{cov(X,Y)}{\sigma_X\sigma_Y}$$
+
+This is trivial to prove with the Cauchy-Swartz inequality which states
+that
+
+$$|cov(X,Y)| \leq \sqrt{\sigma_X^2\sigma_Y^2}$$
+
+because for $\rho(X,Y)$ to be $> 1$ or $< -1$, then
+$|cov(X,Y)| > \sqrt{\sigma_X^2\sigma_Y^2}$, which is false.
+
+}
+
+\exercise[]{
+\textbf{Show that, if $Y=aX+b$ for some parameters $a>0$ and $b$, then
+$\rho(X,Y)=1$. Similarly show that if $a<0$, then $\rho(X,Y)=-1$.}
+
+\begin{align}
+    \rho(X,Y) & = \frac{cov(X,Y)}{\sigma_X\sigma_Y} \\
+    & = \frac{E[(X-E[X])(Y-E[Y])]}{\sqrt{E[(X-E[X])^2]E[(Y-E[Y])^2]}} \\
+\end{align}
+
+Note that the quantity $(Y-E[Y])$ can be written as
+
+\begin{align}
+    Y-E[Y] & = aX+b-E[aX+b] \\
+           & = aX+b-b-aE[X] \\
+           & = a(X-E[X])
+\end{align}
+
+Plugging this, we get
+
+\begin{align}
+    \rho(X,Y) & = \frac{aE[(X-E[X])(X-E[X])]}{|a|\sqrt{E[(X-E[X])^2]E[(X-E[X])^2]}} \\
+              & = \frac{E[(X-E[X])(X-E[X])]}{E[(X-E[X])^2]} \\
+              & = \frac{E[(X-E[X])^2]}{E[(X-E[X])^2]} \\
+              & = 1
+\end{align}
+
+If $a<0$, then this changes to
+
+\begin{align}
+    \rho(X,Y) & = \frac{aE[(X-E[X])^2]}{|a|\sqrt{E[(X-E[X])^2]E[(X-E[X])^2]}} \\
+              & = -\frac{E[(X-E[X])^2]}{E[(X-E[X])^2]} \\
+              & = -1
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Derive the normalization constant for multivariate Gaussian.}
+
+We are trying to show that
+
+$$(2\pi)^{D/2}|\Sigma|^{1/2} = \int exp(-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu))dx$$
+
+Using eigenvalue decomposition on $\Sigma = U\Lambda U^T$, we can write this as
+
+\begin{align}
+    (2\pi)^{D/2}|\Sigma|^{1/2} & =
+        \int exp(-\frac{1}{2}(x-\mu)^T U\Lambda^{-1} U^T(x-\mu))dx \\
+    & = \int exp(-\frac{1}{2}u^T \Lambda^{-1} u) du \\
+    & = \int exp(-\frac{1}{2} \sum_d \frac{u_d^2}{\lambda_d}) du \\
+    & = \prod_{i=1}^D \int exp(-\frac{u_i^2}{2 \lambda_i}) du
+\end{align}
+
+Note that this is the product of single dimensional Gaussians. We know that
+$\int exp(-\frac{u^2}{2\sigma^2}) = \sqrt{2\pi \sigma^2}$, and so we can rewrite
+this expression as
+
+\begin{align}
+    \prod_{i=1}^D \int exp(-\frac{u_i^2}{2 \lambda_i}) du & =
+        \prod_{i=1}^D \sqrt{2\pi \lambda_i} \\
+    & = (2\pi)^{D/2} \prod_{i=1}^D \lambda_i^{1/2} \\
+    & = (2\pi)^{D/2} |\Sigma|^{1/2}
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Derive the pdf of the bivariate Guassian with $\Sigma$ given.}
+
+Note that
+
+\begin{align}
+    \Sigma^{-1} = 
+    \frac{1}{\sigma_1^2 \sigma_2^2 - \rho^2 \sigma_1^2 \sigma_2^2}
+    \begin{bmatrix}
+        \sigma_2^2 & -\rho \sigma_1 \sigma_2 \\ 
+        -\rho \sigma_1 \sigma_2 & \sigma_1^2 
+    \end{bmatrix}
+\end{align}
+
+and
+
+\begin{align}
+    & (x-\mu)^T\Sigma^{-1}(x-\mu) = 
+    \frac{1}{\sigma_1^2 \sigma_2^2 - \rho^2 \sigma_1^2 \sigma_2^2}
+    \begin{bmatrix}
+        x_1 - \mu_1 & x_2 - \mu_2
+    \end{bmatrix}
+    \begin{bmatrix}
+        \sigma_2^2 & -\rho \sigma_1 \sigma_2 \\ 
+        -\rho \sigma_1 \sigma_2 & \sigma_1^2 
+    \end{bmatrix}
+    \begin{bmatrix}
+        x_1-\mu_1 \\ x_2-\mu_2 
+    \end{bmatrix} \\
+    & = \frac{1}{\sigma_1^2 \sigma_2^2 - \rho^2 \sigma_1^2 \sigma_2^2}
+    \begin{bmatrix}
+        \sigma_1^2(x_1-\mu_1) + \rho \sigma_1 \sigma_2 (x_2 - \mu_n) &
+        \rho \sigma_1 \sigma_2 (x_1 - \mu_1) + \sigma_2^2 (x_2 - \mu_n)
+    \end{bmatrix}
+    \begin{bmatrix}
+        x_1-\mu_1 \\ x_2-\mu_2 
+    \end{bmatrix} \\
+    & = \frac{1}{\sigma_1^2 \sigma_2^2 - \rho^2 \sigma_1^2 \sigma_2^2}
+      (x_1 - \mu_1) (\sigma_1^2 (x_1 - \mu_1) + \rho \sigma_1 \sigma_2
+         (x_2 - \mu_2)) + (x_2 - \mu_2) (\rho \sigma_1 \sigma_2
+         (x_1 - \mu_1) + \sigma_2^2 (x_2 - \mu_2)) \\
+    & = \frac{1}{\sigma_1^2 \sigma_2^2 - \rho^2 \sigma_1^2 \sigma_2^2}
+    \sigma_1^2 (x_1-\mu_1)^2 + 2 \rho \sigma_1 \sigma_2(x_1-\mu_1)(x_2-\mu_2)
+        + \sigma_2^2 (x_2-\mu_2)^2 \\
+    & = \frac{1}{1-\rho^2}\frac{\sigma_1^2 (x_1-\mu_1)^2}{\sigma_1^2 \sigma_2^2} +
+        \frac{2 \rho \sigma_1 \sigma_2(x_1-\mu_1)(x_2-\mu_2)}
+             {\sigma_1^2 \sigma_2^2} + \frac{\sigma_2^2 (x_2-\mu_2)^2}
+             {\sigma_1^2 \sigma_2^2} \\
+    & = \frac{1}{1-\rho^2}\left ( \frac{(x_1-\mu_1)^2}{\sigma_1^2} +
+        \frac{(x_2-\mu_2)^2}{\sigma_2^2} + 2\rho \frac{(x_1-\mu_1)}{\sigma_1}
+        \frac{(x_2-\mu_2)}{\sigma_2} \right )
+\end{align}
+
+We see that this is the quantity requested of us in the exercise.
+
+}
+
+\exercise[]{
+\textbf{Compute the conditional probability distribution of the given
+bivariate Gaussian.}
+
+Note that the conditional probability of two Gaussians is a Gaussian. Also
+the conditional probability distribution is given by
+
+\begin{align}
+    p(x_1|x_2) & = N(x_1|\mu_{1|2},\Sigma_{1|2}) \\
+    \mu_{1|2}  & = \mu_1 + \Sigma_{12}\Sigma_{22}^{-1}(x_2-\mu_2) \\
+    \Sigma_{1|2} & = \Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}
+\end{align}
+
+It simplifies things greatly that we are considering a bivariate Gaussian,
+since $\Sigma_{jk}$ becomes a scalar. Thus, after plugging in to the equations
+given in the problem,
+
+\begin{align}
+    p(x_2|x_1) & = N(x_2|\mu_{2|1},\Sigma_{2|1}) \\
+    \mu_{2|1} &=\mu_2+\sigma_1\sigma_2(\rho \frac{\sigma_2}{\sigma_1}(x_1-\mu_1)) \\
+    & = \mu_2 + \rho \sigma_2^2 (x_1 - \mu_1) \\
+    \Sigma_{2|1} & = \sigma_1\sigma_2 \frac{\sigma_2}{\sigma_1} -
+                     \sigma_1\sigma_2 \rho^2 \frac{\sigma_2}{\sigma_1} \\
+                 & = \sigma_2^2 + \rho^2 \sigma_2^2 \\
+    p(x_2|x_1) & = N(x_2|\mu_2+\rho\sigma_2^2(x_1-\mu_1), \rho^2\sigma_2^2)
+\end{align}
+
+If $\sigma_2 = \sigma_1 = 1$, then
+
+$$p(x_2|x_1) = N(x_2|\mu_2+\rho(x_1-\mu_1), \rho^2)$$
+
+}
+
+\exercise[]{
+\textbf{This exercise is shown in the R notebook "ch4-8.ipynb"}}
+
+\exerciseshere
