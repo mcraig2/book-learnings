@@ -245,4 +245,165 @@ $$p(x_2|x_1) = N(x_2|\mu_2+\rho(x_1-\mu_1), \rho^2)$$
 \exercise[]{
 \textbf{This exercise is shown in the R notebook "ch4-8.ipynb"}}
 
+\exercise[]{
+\textbf{Suppose you have two sensors with known (and different) variances
+$\nu_1$ and $\nu_2$, but unknown and same mean $\mu$. What is the posterior
+$p(\mu|D)$, assuming a non-informative prior for $\mu$?}
+
+In section 4.4.2.1 we saw that the posterior of some observed data from some
+noisy measurements of this is given by
+
+\begin{align}
+    p(\mu|y_1,y_2,...,y_n) & =  0
+    p(\mu|D,\Sigma) & = N(\mu|m_N, V_N) \\
+           V_N^{-1} & = V_0^{-1} + N\Sigma^{-1} \\
+                m_N & = V_N(\Sigma^{-1}(N\bar{x})+V_0^{-1}m_0) \\
+\end{align}
+
+By assuming an uninformative prior, we are saying that $V_0=\infty I$, which
+simplifies these to
+
+\begin{align}
+    p(\mu|D,\Sigma) & = N(\mu|\bar{x},\frac{1}{N}\Sigma) \\
+\end{align}
+
+TODO
+
+}
+
+\exercise[]{
+\textbf{Derive the information form results of Section 4.3.1.}
+
+The information form the Gaussian distribution is given by
+
+\begin{align}
+    N(x|\xi, \Lambda) & = (2\pi)^{D/2}|\Lambda|^{1/2}exp
+   \left [ -\frac{1}{2} (x^T\Lambda x + \xi^T\Lambda^{-1}\xi-2x^T\xi) \right ] \\
+    & \propto exp \left [ -\frac{1}{2} (x^T\Lambda x + \xi^T\Lambda^{-1}\xi-2x^T\xi) \right ] \\
+    & = exp \left [ -\frac{1}{2}
+    \begin{pmatrix}
+        x_1 \\ x_2 
+    \end{pmatrix}^T
+    \begin{pmatrix}
+        \Lambda_{11} & \Lambda_{12} \\ 
+        \Lambda_{21} & \Lambda_{22} 
+    \end{pmatrix}
+    \begin{pmatrix}
+        x_1\\ x_2 
+    \end{pmatrix} +
+    \begin{pmatrix}
+        \xi_1 \\ \xi_2 
+    \end{pmatrix}^T
+    \begin{pmatrix}
+        \Lambda_{11} & \Lambda_{12} \\ 
+        \Lambda_{21} & \Lambda_{22} 
+    \end{pmatrix}^{-1}
+    \begin{pmatrix}
+        \xi_1\\ \xi_2 
+    \end{pmatrix} -
+    2 \begin{pmatrix}
+        x_1 \\ x_2 
+    \end{pmatrix}^T
+    \begin{pmatrix}
+        \xi_1\\ \xi_2 
+    \end{pmatrix}
+    \right ] \\
+    & = exp [ -\frac{1}{2}
+    x_2(x_1 \Lambda_{12} + x_2\Lambda_{22}) +
+    x_1(x_1\Lambda_{11} + x_2\Lambda_{21}) + \\
+    & \begin{pmatrix}
+        \xi_1 \\ \xi_2 
+    \end{pmatrix}^T
+    \begin{pmatrix}
+        I & 0 \\ 
+        -\Lambda_{22}^{-1}\Lambda_{21} & I 
+    \end{pmatrix}
+    \begin{pmatrix}
+        (\Lambda_{11}-\Lambda_{12}\Lambda_{22}^{-1}\Lambda_{21})^{-1} & 0\\ 
+        0 & \Lambda_{22}^{-1}
+    \end{pmatrix}
+    \begin{pmatrix}
+        I & -\Lambda_{12}\Lambda_{22}^{-1} \\ 
+        0 & I
+    \end{pmatrix}
+    \begin{pmatrix}
+        \xi_1\\ \xi_2 
+    \end{pmatrix}
+    - 2x_1 \xi_1 -2x_2 \xi_2 ]
+\end{align}
+
+$$N(x|\xi, \Lambda) = N(x|\Sigma^{-1} \mu, \Sigma^{-1})$$
+
+The statements we are trying to prove is
+
+\begin{align}
+p(x_1) & = N(x_1|\mu_1, \Sigma_{11}) \\
+p(x_2) & = N(x_2|\mu_2, \Sigma_{22}) \\
+p(x_1|x_2) & = N(x_1|\mu_{1|2}, \Sigma_{1|2}) \\
+\mu_{1|2} & = \mu_1 + \Sigma_{12}\Sigma_{22}^{-1}(x_2 - \mu_2) \\
+\Sigma_{1|2} &=\Sigma_{11}-\Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}=\Lambda_{11}^{-1}
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Derive equation 4.209}
+
+The posterior is given by
+
+\begin{align}
+    p(\mu, \Sigma|D) & = \frac{p(D|\mu, \Sigma)p(\mu, \Sigma)}{p(D)} \\
+    & \propto p(D|\mu, \Sigma)NIW(\mu,\Sigma|m_0,\kappa_0,\upsilon_0,S_0) \\
+    & = (2\pi)^{ND/2}|\Sigma|^{-\frac{N}{2}}
+        exp(-\frac{N}{2}(\mu-\bar{x})^{T}\Sigma^{-1}(\mu-\bar{x})
+            -\frac{1}{2}tr(\Sigma^{-1}S_{\bar{x}})) \\
+        & \times NIW(\mu,\Sigma|m_0,\kappa_0,\upsilon_0,S_0) \\
+    & \propto |\Sigma|^{-\frac{N}{2}}
+        exp(-\frac{N}{2}(\mu-\bar{x})^{T}\Sigma^{-1}(\mu-\bar{x})
+            -\frac{1}{2}tr(\Sigma^{-1}S_{\bar{x}})) \\
+    & \times |\Sigma|^{-\frac{\upsilon_0+D+2}{2}}
+        exp(-\frac{\kappa_0}{2}(\mu-m_0)^{T}\Sigma^{-1}(\mu-m_0)
+            -\frac{1}{2}tr(\Sigma^{-1}S_0)) \\
+    & = |\Sigma|^{-\frac{\upsilon_0+D+2+N}{2}}
+        exp(-\frac{N}{2}(\mu-\bar{x})^{T}\Sigma^{-1}(\mu-\bar{x})
+            -\frac{\kappa_0}{2}(\mu-m_0)^{T}\Sigma^{-1}(\mu-m_0) \\
+    & -\frac{1}{2}tr(\Sigma^{-1}S_0) -\frac{1}{2}tr(\Sigma^{-1}S_{\bar{x}})) \\
+    & = |\Sigma|^{-\frac{\upsilon_N+D+2}{2}}
+        exp(-\frac{\kappa_N}{2}(\mu-m_N)^{T}\Sigma^{-1}(\mu-m_N)
+            -\frac{1}{2}tr(\Sigma^{-1}S_N)) \\
+    & = NIW(\mu,\Sigma|m_N,\kappa_N,\upsilon_N,S_N)
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{a. Derive the BIC score for a Gaussian with dimension $D$ will full
+covariance matrix.}
+
+The BIC is given by
+
+\begin{align}
+    BIC & = log\,p(D|\hat{\mu},\hat{\Sigma}) - \frac{d}{2}log(N) \\
+    & = -\frac{N}{2}tr(\hat{\Sigma}^{-1}\hat{S})
+        -\frac{N}{2}log(|\hat{\Sigma}|) - \frac{d}{2}log(N) \\
+    & = -\frac{N}{2}tr(\hat{\Sigma}^{-1}\hat{\Sigma})
+        -\frac{N}{2}log(|\hat{\Sigma}|) - \frac{d}{2}log(N) \\
+    & = -\frac{Nd}{2}-\frac{N}{2}log(|\hat{\Sigma}|) - \frac{d}{2}log(N) \\
+    & = -\frac{1}{2}(Nd + dlog(N) + Nlog(|\hat{\Sigma}|))
+\end{align}
+
+\textbf{b. Derive the BIC for a Gaussian with diagonal covariance matrix.}
+
+Note that for diagonal matrices, the determinant is just the product of
+the diagonals. Thus, we can reduce the above equation to
+
+\begin{align}
+    BIC & = log\,p(D|\hat{\mu},\hat{\Sigma}) - \frac{d}{2}log(N) \\
+        & = -\frac{1}{2}(Nd + dlog(N) + Nlog(|\hat{\Sigma}|)) \\
+        & = -\frac{1}{2}(Nd + dlog(N) + Nlog(\prod_{i=1}^{d} \sigma_i)) \\
+        & = -\frac{1}{2}(Nd + dlog(N) + N\sum_{i=1}^{d} log(\sigma_i))
+\end{align}
+
+}
+
 \exerciseshere
