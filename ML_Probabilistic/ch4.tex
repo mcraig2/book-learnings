@@ -406,4 +406,555 @@ the diagonals. Thus, we can reduce the above equation to
 
 }
 
+\exercise[]{
+\textbf{Compute the sample size needed to compute the given Bayesian
+credible interval.}
+
+From the text, we see that the posterior of the mean is given by
+
+\begin{align}
+    p(\mu|D,\Sigma) & = N(\mu|m_N,V_N) \\
+    V_N^{-1} & = V_0^{-1} + N\Sigma^{-1} \\
+    m_N & = V_N (\Sigma^{-1} (N\bar{x}) + V_0^{-1}m_0)
+\end{align}
+
+Plugging these into what's given in the problem we get
+
+\begin{align}
+    \frac{1}{\sigma^{2}_N} & = \frac{1}{\sigma^{2}_0} + \frac{N}{\sigma^{2}} \\
+    \frac{N}{\sigma^{2}} & = \frac{1}{\sigma^{2}_N} - \frac{1}{\sigma^{2}_0} \\
+    N & = \frac{\sigma^{2}}{\sigma^{2}_N} - \frac{\sigma^{2}}{\sigma^{2}_0} \\
+      & = \sigma^{2} \left ( \frac{1}{\sigma^{2}_N}-\frac{1}{\sigma^{2}_0} \right )
+\end{align}
+
+Plugging in the known values, we see that
+
+\begin{align}
+    N & = \sigma^{2}\left ( \frac{1}{\sigma^{2}_N}-\frac{1}{\sigma^{2}_0}\right ) \\
+      & = 4\left (\frac{1}{\sigma^{2}_N}-\frac{1}{9} \right ) \\
+\end{align}
+
+Now all we need to know is $\sigma^{2}_N$ to compute this. For this, we know
+that the interval must be of width $1$. We can use this to show that
+
+\begin{align}
+    u - l & = 1 = (\mu_N + 1.96\sigma_N) - (\mu_N - 1.96\sigma_N) \\
+    1 + \mu_N - 1.96\sigma_N & = \mu_N + 1.96\sigma_N \\
+    1 & = 3.92\sigma_N \\
+    \sigma_N & = \frac{1}{3.92} \\
+    \sigma^{2}_N & = \frac{1}{3.92^{2}}
+\end{align}
+
+Now we can plug everything in to get
+
+\begin{align}
+    N & = 4\left (\frac{1}{\sigma^{2}_N}-\frac{1}{9} \right ) \\
+      & = 4\left (3.92^{2}-\frac{1}{9}\right ) \\
+      & \approx 61.02
+\end{align}
+
+For sample sizes we always round up, so the sample size is $N = 62$.
+
+}
+
+\exercise[]{
+\textbf{a. Calculate the MAP estimate of $\mu$ for a 1-d Gaussian.}
+
+The posterior is given by
+
+\begin{align}
+    p(\mu|D) & \propto p(D|\mu)p(\mu) \\
+             & = N(\mu,m_N,V_N) \\
+        V_N^{-1} & = V_0^{-1} + N\Sigma^{-1} \\
+        m_N & = V_N(\Sigma^{-1} (N\bar{x}) + V_0^{-1}m_0)
+\end{align}
+
+Because the mode is the mean of a Gaussian, we can compute the posterior
+mean of the distribution and this will be the MAP estimate.
+
+\begin{align}
+    p(\mu|D) & = N(\mu,m_N,V_N) \\
+    m_N & = V_N(\Sigma^{-1} (N\bar{x}) + V_0^{-1}m_0) \\
+        & = V_N(\frac{N\bar{x}}{\sigma^{2}} + \frac{m}{s^2}) \\
+    V_N & = \left ( \frac{1}{s^{2}} + \frac{N}{\sigma^{2}} \right )^{-1}
+          = \frac{s^2\sigma^2}{\sigma^2 + Ns^2} \\
+    m_N & = \frac{s^2\sigma^2}{\sigma^2 + Ns^2}
+            \left (\frac{N\bar{x}}{\sigma^{2}} + \frac{m}{s^2}\right ) \\
+        & = \frac{N\bar{x}s^2\sigma^2}{\sigma^2(\sigma^2+Ns^2)} +
+            \frac{s^2\sigma^2m}{s^2(\sigma^2+Ns^2)} \\
+        & = \frac{N\bar{x}s^2}{\sigma^2+Ns^2}+\frac{\sigma^2m}{\sigma^2+Ns^2} \\
+        & = \frac{N\bar{x}s^2+\sigma^2m}{\sigma^2+Ns^2}
+\end{align}
+
+This is the MAP estimate of the mean.
+
+\textbf{b. Show that as the number of samples $n$, the MAP estimate converges
+to the MLE.}
+
+\begin{align}
+    \hat{\mu}_{MAP} & = \frac{N\bar{x}s^2+\sigma^2m}{\sigma^2+Ns^2} \\
+    \hat{\mu}_{MLE} & = \bar{x}
+\end{align}
+
+So, we need to show that as $n$ tends to infinity, the MAP solution converges
+to $\bar{x}$. Thus
+
+\begin{align}
+    \lim_{n\rightarrow \infty} \frac{N\bar{x}s^2+\sigma^2m}{\sigma^2+Ns^2} & =
+    \frac{N\bar{x}s^2}{Ns^2} = \frac{Ns^2}{Ns^2}\bar{x} = \bar{x}
+\end{align}
+
+\textbf{c. Suppose $n$ is small and fixed. What does the MAP estimate converge
+to if we increase the prior variance $s^2$?}
+
+This is similar to the previous section, but now we are taking the limit of
+$s^2$ to $\infty$.
+
+\begin{align}
+    \lim_{s\rightarrow \infty} \frac{N\bar{x}s^2+\sigma^2m}{\sigma^2+Ns^2} & =
+    \frac{Ns^2\bar{x}}{Ns^2} = \frac{Ns^2}{Ns^2}\bar{x} = \bar{x}
+\end{align}
+
+So, increasing the prior variance to $\infty$ yields the MLE. This makes sense,
+since the prior with infinite variance is an uninformative prior.
+
+\textbf{c. Suppose $n$ is small and fixed. What does the MAP estimate converge
+to if we decrease the prior variance $s^2$?}
+
+This is similar to the previous section, but now we are taking the limit of
+$s^2$ to $0$.
+
+\begin{align}
+    \lim_{s\rightarrow 0} \frac{N\bar{x}s^2+\sigma^2m}{\sigma^2+Ns^2} & =
+    \frac{\sigma^2m}{\sigma^2} = \frac{\sigma^2}{\sigma^2}m = m
+\end{align}
+
+So, as the prior variance tends to $0$, the MAP converges to the prior mean $m$.
+This makes sense, because a prior with a variance of $0$ encodes the belief
+that we are absolutely certain of the prior mean.
+
+}
+
+\exercise[]{
+\textbf{a. Show how to sequentially update the covariance estimate.}
+
+The sample covariance is given by
+
+$$\hat{\Sigma} = C_n = \frac{1}{n-1} \sum_{i=1}^{n} (x_i-m_n)(x_i-m_n)^T$$
+
+Note that we can update the cumulative mean as
+
+$$m_{n+1} = \frac{x_{n+1} + nm_n}{n+1}$$
+
+What we are trying to show is that
+
+\begin{align}
+    C_{n+1} & = \frac{n-1}{n}C_n+\frac{1}{n+1}(x_{n+1}-m_n)(x_{n+1}-m_n)^T \\
+    nC_{n+1} & = (n-1)C_n+\frac{n}{n+1}(x_{n+1}-m_n)(x_{n+1}-m_n)^T \\
+    nC_{n+1}-(n-1)C_n & = \frac{n}{n+1}(x_{n+1}-m_n)(x_{n+1}-m_n)^T
+\end{align}
+
+This form is a little easier to work with. Using this definition and the
+following definitions:
+
+\begin{align}
+    C_n & = \frac{1}{n-1} \sum_{i=1}^{n} (x_i-m_n)(x_i-m_n)^T \\
+    C_{n+1} & = \frac{1}{n} \sum_{i=1}^{n+1} (x_i-m_{n+1})(x_i-m_{n+1})^T
+\end{align}
+
+We can show that
+
+\begin{align}
+    nC_{n+1}-(n-1)C_n & = \sum_{i=1}^{n+1} (x_i-m_{n+1})(x_i-m_{n+1})^T
+        - \sum_{i=1}^{n} (x_i-m_n)(x_i-m_n)^T \\
+    & = \sum_{i=1}^{n+1} x_ix_i^T - m_{n+1}m_{n+1}^T -
+        \sum_{i=1}^{n} x_ix_i^T -m_nm_n^T \\
+    & = x_{n+1}x_{n+1}^T - (n+1)m_{n+1}m_{n+1}^T - n m_nm_n^T \\
+    & = x_{n+1}x_{n+1}^T - n m_nm_n^T - (n+1)
+        \left ( \frac{x_{n+1}+nm_n}{n+1} \right )
+        \left ( \frac{x_{n+1}+nm_n}{n+1} \right )^T \\
+    & = x_{n+1}x_{n+1}^T-n m_nm_n^T-\frac{1}{n+1}(x_{n+1}+nm_n)(x_{n+1}+nm_n)^T \\
+    & = x_{n+1}x_{n+1}^T-n m_nm_n^T-\frac{1}{n+1}
+        (x_{n+1}x_{n+1}^T+nx_{n+1}m_n+nm_nx_{n+1}+n^2m_nm_n^T) \\
+    & = \frac{n}{n+1}x_{n+1}x_{n+1}^T-nm_nm_n^T-\frac{n^2}{n+1}m_nm_n^T
+        -\frac{n}{n+1}x_{n+1}m_n-\frac{n}{n+1}m_nx_{n+1} \\
+    & = \frac{n}{n+1}x_{n+1}x_{n+1}^T-\frac{n(n+1)}{n+1}m_nm_n^T
+        -\frac{n^2}{n+1}m_nm_n^T \\
+    & = \frac{n}{n+1}x_{n+1}x_{n+1}^T-\frac{n}{n+1}m_nm_n^T \\
+    & = \frac{n}{n+1}(x_{n+1}-m_n)(x_{n+1}-m_n)^T
+\end{align}
+
+which is what we intended to show.
+
+\textbf{b. What is the big-O run time of this sequential update?}
+
+This procedure is $O(d^2)$, because we only have to compute one inner
+product at a time.
+
+\textbf{c. Show how to incrementally update the precision matrix.}
+
+Let $u = (x_{n+1}-m_n)$. Then
+
+\begin{align}
+    C_{n+1}^{-1} & = \left (\frac{n-1}{n}C_n+\frac{1}{n+1}uu^T\right )^{-1}
+\end{align}
+
+and we are trying to show that
+
+\begin{align}
+    C_{n+1}^{-1} & = \frac{n}{n-1} \left [C_n^{-1} -
+         \frac{C_n^{-1}uu^TC_n^{-1}}{\frac{n^2-1}{n}+u^TC_n^{-1}u}\right ]
+\end{align}
+
+Using the matrix inversion lemma provides us with
+
+\begin{align}
+    C_{n+1}^{-1} & = \left (\frac{n-1}{n}C_n+\frac{1}{n+1}uu^T\right )^{-1} \\
+    & = \frac{n}{n-1}C_n^{-1} - \frac{\frac{n}{n-1}C_n^{-1}
+        \frac{1}{n+1}uu^T\frac{n}{n-1}C_n^{-1}}
+             {1+\frac{1}{n+1}u^T\frac{n}{n-1}C_n^{-1}u} \\
+    & = \frac{n}{n-1}C_n^{-1} - \frac{\frac{n^2}{(n-1)^2(n+1)}
+        C_n^{-1}uu^TC_n^{-1}}{1+\frac{n}{(n-1)(n+1)}u^TC_n^{-1}u} \\
+\end{align}
+
+Note that
+
+$$\frac{n^2}{(n-1)^2(n+1)} = \frac{n}{n-1} \frac{n}{(n-1)(n+1)}$$
+
+and
+
+$$(n-1)(n+1)(1 + \frac{n}{(n-1)(n+1)} B) = (n-1)(n+1) + nB = n^2 - 1 + nB$$
+
+Using these we see that
+
+\begin{align}
+    C_{n+1}^{-1} & = \frac{n}{n-1}C_n^{-1} - \frac{\frac{n^2}{(n-1)^2(n+1)}
+        C_n^{-1}uu^TC_n^{-1}}{1+\frac{n}{(n-1)(n+1)}u^TC_n^{-1}u} \\
+    & = \frac{n}{n-1}\left [ C_n^{-1} - \frac{nC_n^{-1}uu^TC_n^{-1}}
+        {n^2-1+nu^TC_n^{-1}u} \right ] \\
+    & = \frac{n}{n-1}\left [ C_n^{-1} - \frac{C_n^{-1}uu^TC_n^{-1}}
+        {\frac{n^2-1}{n}u^TC_n^{-1}u} \right ]
+\end{align}
+
+\textbf{d. What's the big-O complexity of this procedure?}
+
+This procedure is also $O(d^2)$.
+
+}
+
+\exercise[]{
+\textbf{Derive an expression for the log likelihood ratio with an arbitrary
+covariance matrix.}
+
+\begin{align}
+    log\frac{p(y=1|x)}{p(y=0|x)} & = log\frac{p(x|y=1)}{p(x|y=0)}
+                                     + log\frac{p(y=1)}{p(y=0)} \\
+& = log\frac{N(x|\mu_1,\Sigma_1)}{N(x|\mu_2,\Sigma_2)}+log\frac{p(y=1)}{p(y=0)} \\
+& = log\frac{(2\pi)^{D/2}|\Sigma_1|^{1/2}
+             exp(-\frac{1}{2}(x-\mu_1)^T\Sigma_1^{-1}(x-\mu_1)}
+            {(2\pi)^{D/2}|\Sigma_0|^{1/2}
+             exp(-\frac{1}{2}(x-\mu_0)^T\Sigma_0^{-1}(x-\mu_0)}
+    + log\frac{p(y=1)}{p(y=0)} \\
+& = log \frac{|\Sigma_1|^{1/2}}{|\Sigma_0|^{1/2}}
+        exp(-\frac{1}{2}(x-\mu_1)^T\Sigma_1^{-1}(x-\mu_1)
+            -\frac{1}{2}(x-\mu_0)^T\Sigma_0^{-1}(x-\mu_0)) +
+    log\frac{p(y=1)}{p(y=0)} \\
+& = log\frac{|\Sigma_1|^{1/2}}{|\Sigma_0|^{1/2}}
+    -\frac{1}{2}(x-\mu_1)^T\Sigma_1^{-1}(x-\mu_1)
+    -\frac{1}{2}(x-\mu_0)^T\Sigma_0^{-1}(x-\mu_0) +
+    log\frac{p(y=1)}{p(y=0)}
+\end{align}
+
+We can simplify this further if we make assumptions about the problem. For
+example, if the covariance matrix is shared ($\Sigma_j = \Sigma$), then
+
+\begin{align}
+    log\frac{p(y=1|x)}{p(y=0|x)} & = log\frac{|\Sigma|^{1/2}}{|\Sigma|^{1/2}}
+    -\frac{1}{2}(x-\mu_1)^T\Sigma^{-1}(x-\mu_1)
+    -\frac{1}{2}(x-\mu_0)^T\Sigma^{-1}(x-\mu_0) +
+    log\frac{p(y=1)}{p(y=0)} \\
+    & = 1 + log\frac{p(y=1)}{p(y=0)} - \frac{1}{2} \left [
+tr((x-\mu_1)^T\Sigma^{-1}(x-\mu_1)) + tr((x-\mu_0)^T\Sigma^{-1}(x-\mu_0)) \right ] \\
+    & = 1 + log\frac{p(y=1)}{p(y=0)} - \frac{1}{2} \left [
+tr((x-\mu_1)^T\Sigma^{-1}(x-\mu_1) + (x-\mu_0)^T\Sigma^{-1}(x-\mu_0)) \right ] \\
+\end{align}
+
+Further, if the covariance matrix is shared and diagonal, then
+
+\begin{align}
+    log\frac{p(y=1|x)}{p(y=0|x)}&=1 + log\frac{p(y=1)}{p(y=0)} - \frac{1}{2} \left [
+tr((x-\mu_1)^T\Sigma^{-1}(x-\mu_1) + (x-\mu_0)^T\Sigma^{-1}(x-\mu_0)) \right ] \\
+& = 1 + log\frac{p(y=1)}{p(y=0)} - \frac{1}{2}\left [ 
+    \sum_{i=1}^{N} \frac{(x_i-\mu_1)^2}{\sigma_i} + \frac{(x_i-\mu_0)^2}{\sigma_i} \right ]
+\end{align}
+
+Finally, if the covariance is shared and spherical ($\Sigma = \sigma^2I$), then
+
+\begin{align}
+    log\frac{p(y=1|x)}{p(y=0|x)}&= 1 + log\frac{p(y=1)}{p(y=0)} - \frac{1}{2}\left [ 
+    \sum_{i=1}^{N} \frac{(x_i-\mu_1)^2}{\sigma} + \frac{(x_i-\mu_0)^2}{\sigma} \right ] \\
+    &= 1 + log\frac{p(y=1)}{p(y=0)} - \frac{N}{2\sigma}
+    \sum_{i=1}^{N} (x_i-\mu_1)^2 + (x_i-\mu_0)^2 
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Compute the misclassification rate of LDA and QDA on the height/weight
+dataset.}
+
+The code for this can be found in ch4-17.ipynb.
+
+}
+
+\exercise[]{
+\textbf{Consider a $3$ class naive Bayes classifier with one binary feature and
+one Gaussian feature. \\
+a. Compute $p(y|x_1=0,x_2=0)$.}
+
+The naive Bayes classifier can be written as
+
+\begin{align}
+    p(y|x_1=0,x_2=0) & = p(y)p(x_1=0|y)p(x_2=0|y) \\
+    & = Mu(y|\pi,1)Ber(x_1=0|\theta)N(x_2=0|\mu,\sigma^2) \\
+    & = Mu(y,\begin{bmatrix} 0.5\\ 0.25\\ 0.25\\ \end{bmatrix},1)
+        Ber(x_1=0|\begin{bmatrix} 0.5\\ 0.5\\ 0.5\\  \end{bmatrix})
+        N(x_2=0|\begin{bmatrix} -1\\ 0\\ 1\\ \end{bmatrix},
+                \begin{bmatrix} 1\\ 1\\ 1\\ \end{bmatrix}) \\
+    & \propto \begin{bmatrix} 0.5\\ 0.25\\ 0.25\\ \end{bmatrix} \oplus
+        \begin{bmatrix}0.5\\ 0.5\\ 0.5\\ \end{bmatrix} \oplus
+        \begin{bmatrix} 0.2419707\\ 0.3989423\\ 0.2419707\\ \end{bmatrix} \\
+    & = \begin{bmatrix} 0.060492675\\ 0.0498677875\\ 0.0302463375\\ \end{bmatrix} \\
+    & = \begin{bmatrix} 0.4302258233\\ 0.3546612864\\ 0.2151129116\\ \end{bmatrix}
+\end{align}
+
+\textbf{b. Compute $p(y|x_1=0)$.}
+
+We can compute this by noting that
+
+\begin{align}
+    p(y|x_1=0) & = \sum_{i=1}^{3} p(y=i)p(x_1=0|y=i) \\
+    & = \sum_{i=1}^{3} \pi_{i} Ber(x_1=0|\theta_i) \\
+    & = 0.5 \sum_{i=1}^{3} \pi_i = 0.5
+\end{align}
+
+\textbf{c. Compute $p(y|x_2=0)$.}
+
+We can compute this in a similar fashion:
+
+\begin{align}
+    p(y|x_2=0) & = \sum_{i=1}^{3} \pi_i p(x_2=0|y=i) \\
+    & = \sum_{i=1}^{3} \pi_i N(\mu_i, \sigma^2_i) \\
+    & = 0.5 \times 0.2419707 + 0.25 \times 0.3989423 + 0.25 \times 0.2419707 \\
+    & = 0.341706275
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Derive the QDA decision boundary for a binary classification problem
+where $\Sigma_1 = k\Sigma_0$.}
+
+The QDA formulation is given by
+
+\begin{align}
+    p(y=c|x,\theta) & =
+\frac{\pi_c|2\pi\Sigma_c|^{1/2}exp(-\frac{1}{2}(x-\mu_c)^T\Sigma_c^{-1}(x-\mu_c))}
+ {\sum_c\pi_c|2\pi\Sigma_c|^{1/2}exp(-\frac{1}{2}(x-\mu_c)^T\Sigma_c^{-1}(x-\mu_c))}
+\end{align}
+
+Assume that $\Sigma$ is of dimensionality $D$. Formulating this as a binary
+problem and plugging in the fact that $\Sigma_1 = k\Sigma_0$, we get
+
+\begin{align}
+    p(y=1|x,\theta) & =
+\frac{\pi_1|2\pi k\Sigma_0|^{1/2}exp(-\frac{1}{2}(x-\mu_1)^Tk\Sigma_0^{-1}(x-\mu_1))}
+ {\pi_0|2\pi\Sigma_0|^{1/2}exp(-\frac{1}{2}(x-\mu_0)^T\Sigma_0^{-1}(x-\mu_0)) +
+  \pi_1|2\pi k\Sigma_0|^{1/2}exp(-\frac{1}{2}(x-\mu_1)^Tk\Sigma_0^{-1}(x-\mu_1))} \\
+& = \frac{\pi_1k^Dexp(-\frac{1}{2}(x-\mu_1)^Tk\Sigma_0^{-1}(x-\mu_1))}
+ {\pi_0exp(-\frac{1}{2}(x-\mu_0)^T\Sigma_0^{-1}(x-\mu_0)) +
+  \pi_1k^Dexp(-\frac{1}{2}(x-\mu_1)^Tk\Sigma_0^{-1}(x-\mu_1))} \\
+& = \frac{\pi_1k^Dexp(-\frac{k}{2}tr(\Sigma_0^{-1}(x-\mu_1)(x-\mu_1)^T)}
+    {\pi_0exp(-\frac{1}{2}tr(\Sigma_0^{-1}(x-\mu_0)(x-\mu_0)^T) +
+    \pi_1k^Dexp(-\frac{k}{2}tr(\Sigma_0^{-1}(x-\mu_1)(x-\mu_1)^T)} \\
+& = \frac{\pi_1k^Dexp(-\frac{k}{2}tr(\Sigma_0^{-1}xx^T)-\frac{k}{2}tr(\Sigma_0^{-1}\mu_1\mu_1^T))}
+    {\pi_0exp(-\frac{1}{2}tr(\Sigma_0^{-1}xx^T)-\frac{1}{2}tr(\Sigma_0^{-1}\mu_0\mu_0^T)) +
+    \pi_1k^Dexp(-\frac{k}{2}tr(\Sigma_0^{-1}xx^T)-\frac{k}{2}tr(\Sigma_0^{-1}\mu_1\mu_1^T))}
+\end{align}
+
+Let $a = tr(\Sigma_0^{-1}xx^T)$ and $b_c = tr(\Sigma_0^{-1}\mu_c\mu_c^T)$. Then
+
+\begin{align}
+    p(y=1|x,\theta) & =
+\frac{\pi_1k^D\frac{exp(-\frac{k}{2}a)}{exp(-\frac{k}{2}b_1)}}
+     {\pi_0\frac{exp(-\frac{1}{2}a)}{exp(-\frac{1}{2}b_0)} +
+      \pi_1k^D\frac{exp(-\frac{k}{2}a)}{exp(-\frac{k}{2}b_1)}} \\
+& = \frac{\pi_1k^Dexp(-\frac{k}{2}a)}
+    {\pi_0exp(-\frac{1}{2}a-\frac{k}{2}b_1+\frac{1}{2}b_0) +
+     \pi_1k^Dexp(-\frac{k}{2}a)} \\
+& = \frac{1}{\pi_0\pi_1^{-1}k^{-D}exp(\frac{k}{2}a-\frac{1}{2}a
+    -\frac{k}{2}b_1+\frac{1}{2}b_0) + 1} \\
+    & = \frac{1}{\pi_0\pi_1^{-1}k^{-D}exp(\frac{1}{2}((k-1)a-kb_1+b_0)) + 1} \\
+    & = \pi_0^{-1}\pi_1k^DSigm(\nu)
+\end{align}
+
+where
+
+\begin{align}
+    \nu & = -\frac{1}{2}((k-1)a + kb_1 + b_0) \\
+        & = -\frac{1}{2}((k-1)tr(\Sigma_0^{-1}xx^T) +
+                        ktr(\Sigma_0^{-1}\mu_1\mu_1^T) +
+                        tr(\Sigma_0^{-1}\mu_0\mu_0^T)) \\
+        & = -\frac{1}{2}((k-1)tr(\Sigma_0^{-1}xx^T) +
+                         (k-1)tr(\Sigma_0^{-1}\mu_1\mu_1^T) +
+                         tr(\Sigma_0^{-1}\mu_1\mu_1^T) +
+                         tr(\Sigma_0^{-1}\mu_0\mu_0^T)) \\
+        & = -\frac{1}{2}((k-1)(x-\mu_1)^T\Sigma_0^{-1}(x-\mu_1) +
+                         tr(\Sigma_0^{-1}\mu_1\mu_1^T) +
+                         tr(\Sigma_0^{-1}\mu_0\mu_0^T)) \\
+        & = -\frac{1}{2}((k-1)(x-\mu_1)^T\Sigma_0^{-1}(x-\mu_1) +
+                         (\mu_1-\mu_0)^T\Sigma_0^{-1}(\mu_1-\mu_0)) \\
+        & = -\frac{k-1}{2}(x-\mu_1)^T\Sigma_0^{-1}(x-\mu_1) -
+             \frac{1}{2}(\mu_1-\mu_0)^T\Sigma_0^{-1}(\mu_1-\mu_0)
+\end{align}
+
+Thus, since class $1$ is a scaled version of class $2$, the decision boundary
+scales this class as well.
+
+}
+
+\exercise[]{
+\textbf{See the textbook for the full problem description. \\
+a. GaussI, LinLog.}
+
+Note that we are only considering performance on the training set, and only
+considering a loss function that is a function of the conditional likelihood,
+not the joint likelihood.
+
+Logistic regression maximizes the conditional likelihood, whereas LDA and QDA
+maximize the joint likelihood. Since we are only considering training set
+performance, maximizing the conditional likelihood will be sufficient in
+minimizing the given loss function. Thus
+
+$L(GaussI) \geq L(LinLog)$.
+
+\textbf{b. GaussX, QuadLog.}
+
+Again, on the surface they seem equivalent, however the logistic model
+maximizes the conditional likelihood. So similarly
+
+$L(GaussX) \geq L(QuadLog)$.
+
+\textbf{c. LinLog, QuadLog.}
+
+The QuadLog model has more parameters and is therefore more flexible. It might
+not perform as well on the test set, but on the training set it will likely
+perform better. Thus
+
+$L(LinLog) \geq L(QuadLog)$.
+
+\textbf{d. GaussI, QuadLog.}
+
+The GaussI model is likely too restrictive, thus
+
+$L(GaussI) \geq L(QuadLog)$.
+
+\textbf{e. In general is it true that the negative log likelihood loss
+function behaves similarly to the misclassification rate
+($L(M) > L(M')$ implies $R(M) < R(M')$)?}
+
+This is not true because of the discretized nature of the misclassification
+rate. For example, one model could lower the log likelihood loss but still
+not be better "enough" to improve the misclassification rate.
+
+}
+
+\exercise[]{
+\textbf{TODO}
+}
+
+\exercise[]{
+\textbf{Class the points using the QDA model described in the text. \\
+a. $x = [-0.5, 0.5]$.}
+
+Note that the normalization constants for the problem described is given by
+
+\begin{align}
+    Z_c & = \pi_c|2\pi\Sigma_c|^{-1/2} \\
+    Z_1 & = \frac{1}{3}|2\pi 0.7I|^{-1/2} = 0.2273643491 \\
+    Z_2 & = Z_3 = \frac{1}{3}|2\pi \begin{bmatrix}0.8 & 0.2\\ 0.2 & 0.8\end{bmatrix}|^{-1/2} = 0.2054679336
+\end{align}
+
+Another quantity that is useful to compute up front is
+
+\begin{align}
+    M_c & = (x-\mu_c)^T\Sigma_c^{-1}(x-\mu_c) \\
+    M_1 & = \begin{bmatrix}-0.5\\ 0.5\end{bmatrix}^T
+            \begin{bmatrix}0.7 & 0\\ 0 & 0.7\end{bmatrix}^{-1}
+            \begin{bmatrix}-0.5\\ 0.5\end{bmatrix} = 0.714286 \\
+    M_2 & = \begin{bmatrix}-1.5\\ -0.5\end{bmatrix}^T
+            \begin{bmatrix}0.8 & 0.2\\ 0.2 & 0.8\end{bmatrix}^{-1}
+            \begin{bmatrix}-1.5\\ -0.5\end{bmatrix} = 2.83333 \\
+    M_3 & = \begin{bmatrix}0.5\\ -0.5\end{bmatrix}^T
+            \begin{bmatrix}0.8 & 0.2\\ 0.2 & 0.8\end{bmatrix}^{-1}
+            \begin{bmatrix}0.5\\ -0.5\end{bmatrix} = 0.833333
+\end{align}
+
+A final quantity that will use is
+
+\begin{align}
+    P_c & = Z_c exp(-\frac{1}{2}M_c) \\
+    P_1 & = Z_1 exp(-\frac{1}{2}M_1) = 0.1590805683 \\
+    P_2 & = Z_2 exp(-\frac{1}{2}M_2) = 0.0498303871 \\
+    P_3 & = Z_3 exp(-\frac{1}{2}M_3) = 0.1354530358
+\end{align}
+
+We can then plug these into the equation for QDA to get
+
+\begin{align}
+    p(y=1|x,\theta) & = \frac{P_1}{P_1+P_2+P_3} = 0.4619547118 \\
+    p(y=2|x,\theta) & = \frac{P_2}{P_1+P_2+P_3} = 0.1447026645 \\
+    p(y=3|x,\theta) & = \frac{P_3}{P_1+P_2+P_3} = 0.3933426237
+\end{align}
+
+Thus, we would classify this point to class $1$.
+
+\textbf{b. Classify $x = [0.5, 0.5]$.}
+
+We can utilize the same machinery for this.
+
+\begin{align}
+    M_c & = (x-\mu_c)^T\Sigma_c^{-1}(x-\mu_c) \\
+    M_1 & = \begin{bmatrix}0.5\\ 0.5\end{bmatrix}^T
+            \begin{bmatrix}0.7 & 0\\ 0 & 0.7\end{bmatrix}^{-1}
+            \begin{bmatrix}0.5\\ 0.5\end{bmatrix} = 0.714286 \\
+    M_2 & = \begin{bmatrix}-0.5\\ -0.5\end{bmatrix}^T
+            \begin{bmatrix}0.8 & 0.2\\ 0.2 & 0.8\end{bmatrix}^{-1}
+            \begin{bmatrix}-0.5\\ -0.5\end{bmatrix} = 0.5 \\
+    M_3 & = \begin{bmatrix}-0.5\\ 1.5\end{bmatrix}^T
+            \begin{bmatrix}0.8 & 0.2\\ 0.2 & 0.8\end{bmatrix}^{-1}
+            \begin{bmatrix}-0.5\\ 1.5\end{bmatrix} = 3.83333
+\end{align}
+
+And
+
+\begin{align}
+    P_c & = Z_c exp(-\frac{1}{2}M_c) \\
+    P_1 & = Z_1 exp(-\frac{1}{2}M_1) = 0.1590805683 \\
+    P_2 & = Z_2 exp(-\frac{1}{2}M_2) = 0.1600185876 \\
+    P_3 & = Z_3 exp(-\frac{1}{2}M_3) = 0.03022365758
+\end{align}
+
+We can then plug these into the equation for QDA to get
+
+\begin{align}
+    p(y=1|x,\theta) & = \frac{P_1}{P_1+P_2+P_3} = 0.4553970201 \\
+    p(y=2|x,\theta) & = \frac{P_2}{P_1+P_2+P_3} = 0.4580822707 \\
+    p(y=3|x,\theta) & = \frac{P_3}{P_1+P_2+P_3} = 0.08652070925
+\end{align}
+
+Thus we would classify this point to class $2$.
+
+}
+
 \exerciseshere
