@@ -1,0 +1,205 @@
+\section{Frequentist Statistics}
+
+\exercise[]{
+\textbf{Suppose we have a completely random dataset with $N_1$ examples of
+class $1$, and $N_2$ examples of class $2$, where $N_1=N_2$. What is the
+best misclassification rate any method can achieve? What is the estimated
+misclassification rate of the same method using LOOCV?}
+
+The misclassification rate is given by
+
+\begin{align}
+    \frac{1}{N}\sum_{i=1}^N I(\hat{y}_i \neq y_i) & =
+    \frac{1}{N_1+N_2}\sum_{i=1}^N y(1-\hat{y})
+\end{align}
+
+Since the input $x$ tells us nothing about the output $y$, the best
+classification rate we could possibly do is $\frac{1}{K}$, where $K$ is
+the number of classes. Thus, in this case, the best we could do is
+$\frac{1}{2}$. This gives us
+
+\begin{align}
+    \frac{1}{N_1}\sum_{i=1}^{N_1} I(\hat{y}_i \neq y_i) +
+    \frac{1}{N_2}\sum_{i=1}^{N_2} I(\hat{y}_i \neq y_i)
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{James Stein estimator for Gaussian means. \\
+a. Find the ML-II estimate of $m_0$ and $\tau_0^2$.}
+
+The two stage model is given by
+
+$$Y_i|\theta_i \sim N(\theta_i, 500), \theta_i|\mu \sim N(m_0, \tau_0^2)$$
+
+The quantity we must optimize is given by
+
+\begin{align}
+    p(D|\theta_i,\mu) & = \prod_{n=1}^N N(\theta_i, 500)N(m_0|\tau_0^2) \\
+    log\,p(D|\theta_i,\mu) & = \sum_{n=1}^N log\,N(\theta_i,500)
+    + \sum_{n=1}^N log\,N(m_0|tau_0^2) \\
+    & \propto -\sum_{n=1}^N (y_i - \theta_i)^2 - \sum_{n=1}^N
+    log\,\sqrt{2\pi\tau_0^2} - \frac{(y_i-m_0)^2}{2\tau_0^2}
+\end{align}
+
+To find the ML-II estimate, we maximize this quantity with respect to $m_0$:
+
+\begin{align}
+    \frac{d}{dm_0} log\,p(D|\theta_i,\mu) & =
+    \frac{d}{dm_0} (-\sum_{n=1}^N \frac{(y_i-m_0)^2}{2\tau_0^2}) \\
+    & = \frac{d}{dm_0} (-\sum_{n=1}^N \frac{1}{2\tau_0^2}(y_i^2 -2m_0y_i +m_0^2)) \\
+    & = \frac{d}{dm_0} (\sum_{n=1}^N \frac{1}{2\tau_0^2}(2m_0y_i - m_0^2)) \\
+    & = \frac{d}{dm_0} (\sum_{n=1}^N \frac{1}{\tau_0^2}m_0y_i) -
+        \frac{N^2}{\tau_0^2}m_0 \\
+    & = \frac{d}{dm_0} (\frac{N}{\tau_0^2} \sum_{n=1}^N m_0y_i) -
+        \frac{N^2}{\tau_0^2}m_0 \\
+    & = -\frac{N^2}{\tau_0^2}m_0 + \frac{N}{\tau_0^2}\sum_{n=1}^N y_i
+\end{align}
+
+Setting this equal to $0$, we get
+
+\begin{align}
+    0 & = -\frac{N^2}{\tau_0^2}m_0 + \frac{N}{\tau_0^2}\sum_{n=1}^N y_i \\
+    \frac{N^2}{\tau_0^2}m_0 & = \frac{N}{\tau_0^2}\sum_{n=1}^N y_i \\
+    Nm_0 & = \sum_{n=1}^N y_i \\
+    m_0 & = \frac{1}{N} \sum_{n=1}^N y_i
+\end{align}
+
+Thus we see that the ML-II of $m_0$ is just the arithmetic mean of the dataset.
+
+We can similarly do this analysis for $\tau_0^2$:
+
+\begin{align}
+    \frac{d}{d\tau_0^2} log\,p(D|\theta_i,\mu) & \propto
+    \frac{d}{d\tau_0^2} (-\sum_{n=1}^N (y_i - \theta_i)^2 - \sum_{n=1}^N
+    log\,\sqrt{2\pi\tau_0^2} - \frac{(y_i-m_0)^2}{2\tau_0^2}) \\
+    & = \frac{d}{d\tau_0^2} (-Nlog\,\sqrt{2\pi\tau_0^2} - \frac{N}{2\tau_0^2}
+        \sum_{n=1}^N (y_i-m_0)^2) \\
+    & = \frac{d}{d\tau_0^2} (-Nlog\,\sqrt{2\pi\tau_0^2}) -
+        \frac{N\sum_{n=1}^N (y_i-m_0)^2}{4\tau_0^4} \\
+    & = -\frac{N}{2\tau_0^2} - \frac{N\sum_{n=1}^N (y_i-m_0)^2}{4\tau_0^4}
+\end{align}
+
+Again, setting this to $0$ gives us
+
+\begin{align}
+    0 & = -\frac{N}{2\tau_0^2} - \frac{N\sum_{n=1}^N (y_i-m_0)^2}{4\tau_0^4} \\
+    \frac{N}{2\tau_0^2} & = \frac{N\sum_{n=1}^N (y_i-m_0)^2}{4\tau_0^4} \\
+    \frac{2\tau_0^2}{4\tau_0^4} & = \frac{N}{N\sum_{n=1}^N (y_i-m_0)^2} \\
+    \frac{1}{2\tau_0^2} & = \frac{1}{\sum_{n=1}^N (y_i-m_0)^2} \\
+    \tau_0^2 & = \frac{1}{2}\sum_{n=1}^N (y_i-m_0)^2
+\end{align}
+
+\textbf{b. Find the posterior estimates of $E[\theta_i|y_i,m_0,\tau_0]$
+and $var[\theta_i|y_i,m_0,\tau_0]$ for $i=1$.}
+
+Note that as the data tends to $\infty$, the ML estimate coverges to the
+expected value of the actual parameter. So, the posterior estimate of
+$E[\theta_1|y_1,m_0,\tau_0]$ is given by
+
+\begin{align}
+    E[\theta_1|y_1,m_0,\tau_0] & = N(\frac{y_1}{N},\frac{1}{2}
+    (y_1 - \frac{y_1}{N})^2) \\
+    & = N(\frac{y_1}{N}, \frac{1}{2}(\frac{N-1}{N}y_1)^2) \\
+    & = N(\frac{y_1}{N}, \frac{(N-1)^2}{2N^2}y_1^2)
+\end{align}
+
+Plugging in the data, this gives us
+
+\begin{align}
+    E[\theta_1|y_1,m_0,\tau_0] & = N(\frac{y_1}{N}, \frac{(N-1)^2}{2N^2}y_1^2) \\
+    & = N(\frac{1505}{6}, \frac{25}{72}1505^2)
+\end{align}
+
+\textbf{c. Give a $95\%$ credible interval for $p(\theta_i|y_i,m_0,\tau_0)$
+for $i=1$. Do you trust this interval?}
+
+The $95\%$ confidence interval is given by $m_0\pm 1.96\frac{\sigma^2}{\sqrt{N}}$.
+Plugging the numbers in, we get
+
+\begin{align}
+    m_0 \pm 1.96\frac{\sigma^2}{\sqrt{N}} & =
+    \frac{1505}{6} \pm 1.96\frac{\frac{25}{72}1505^2}{\sqrt{6}}
+\end{align}
+
+This interval is very wide.
+
+\textbf{d. What do you expect would happen to your estimates if $\sigma^2$
+were much smaller (say $\sigma^2 = 1$)? You do not need to compute the
+numerical answer; just briefly explain what would happen qualitatively, and why.}
+
+If the $\sigma^2$ were much smaller, this would not affect the variance of
+$\theta_i$, which is affected only by $m_0$ and $\tau_0^2$. Thus, this would
+have no effect on the interval width.
+
+}
+
+\exercise[]{
+\textbf{Show that $\hat{\sigma}^2 = \frac{1}{N}\sum_{n=1}^N (x_n-\hat{\mu})^2$
+is a biased estimator of $\sigma_2$.}
+
+To show this, we note that
+
+\begin{align}
+    E[\hat{\sigma^2}] & = E[\frac{1}{N}\sum_{n=1}^N (x_n-\hat{\mu})^2] \\
+    & = \frac{1}{N}E[\sum_{n=1}^N x_n^2 - 2\sum_{n=1}^N x_n\hat{\mu}
+        + \sum_{n=1}^N \hat{\mu}^2] \\
+    & = \frac{1}{N}E[\sum_{n=1}^N x_n^2-2N\hat{\mu}^2+\sum_{n=1}^N \hat{\mu}^2] \\
+    & = E[\frac{1}{N}\sum_{n=1}^N x_n^2] - 2E[\hat{\mu}^2] +
+        E[\frac{1}{N}\sum_{n=1}^N \hat{\mu}^2] \\
+    & = E[x^2] - 2E[\hat{\mu}^2] + E[\hat{\mu}^2] \\
+    & = E[x^2] - E[\hat{\mu}^2]
+\end{align}
+
+Note that the definition of variance says that
+
+$$\sigma^2 = E[x^2] - E[x]^2$$
+
+So, if we define $\sigma_x^2 = E[x^2] - E[x]^2$ and
+$\sigma_{\hat{\mu}}^2 = E[\hat{\mu}^2] - E[\hat{\mu}]^2$, then
+
+\begin{align}
+    \sigma_x^2 - \sigma_{\hat{\mu}}^2 & =
+        (E[x^2]-E[x]^2)-(E[\hat{\mu}^2]-E[\hat{\mu}]^2) \\
+        & = E[x^2]-E[\hat{\mu}]^2-E[x]^2+E[\hat{\mu}]^2 \\
+        & = E[x^2] - E[\hat{\mu}]^2 \\
+        & = E[\hat{\sigma^2}]
+\end{align}
+
+The last two lines is valid because $E[x]^2 = E[\hat{\mu}]^2$, since
+$\hat{\mu}$ is an unbiased estimator.
+
+Let's investigate the quantity $\sigma_{\hat{\mu}}^2$:
+
+\begin{align}
+    \sigma_{\hat{\mu}}^2 & = Var[\hat{\mu}] \\
+    & = \frac{1}{N^2} Var[\sum_{n=1}^N x_n] \\
+    & = \frac{1}{N^2} \sum_{n=1}^N Var[x] \\
+    & = \frac{N}{N^2} Var[x] \\
+    & = \frac{1}{N} Var[x] \\
+    & = \frac{1}{N} \sigma_x^2
+\end{align}
+
+Therefore,
+
+\begin{align}
+    E[\hat{\sigma}^2] & = \sigma_x^2 - \frac{1}{N} \sigma_x^2 \\
+    & = \frac{N-1}{N} \sigma_x^2
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Estimate $\sigma^2$ when $\mu$ is known.}
+
+We saw before that $E[\hat{\sigma^2}] = \sigma_x^2 - \sigma_{\hat{\mu}}^2$.
+If $\mu$ is known, then $\sigma_{\hat{\mu}}^2 = 0$. Thus,
+
+$$E[\hat{\sigma^2}] = \sigma_x^2$$
+
+which means the estimate is unbiased.
+
+}
+
+\exerciseshere

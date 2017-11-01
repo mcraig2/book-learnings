@@ -1,0 +1,483 @@
+\section{Bayesian Statistics}
+
+\exercise[]{
+\textbf{Prove that a mixture of conjugate priors is indeed conjugate.}
+
+We are trying to show that
+
+$$p(\theta|D) = \sum_k p(z=k|D)p(\theta|D,z=k)$$
+
+with a prior of the form
+
+$$p(\theta) = \sum_k p(z=k)p(\theta|z=k)$$
+
+We know that the posterior can be given by
+
+\begin{align}
+    p(\theta|D) & = \frac{p(D|\theta)p(\theta)}{p(D)} \\
+                & = \frac{p(D|\theta)\sum_k p(\theta|z=k)p(z=k)}{p(D)} \\
+                & = p(D|\theta)\frac{\sum_k p(\theta|z=k)}{p(D)} \\
+                & = \frac{\sum_k p(D|\theta,z=k)p(\theta|z=k)}{p(D)} \\
+                & = \frac{\sum_k p(\theta,z=k|D)p(D)p(\theta|z=k)}
+                         {p(D)\sum_k p(\theta,z=k)} \\
+                & = \frac{\sum_k p(\theta,z=k|D)p(\theta|z=k)}
+                         {\sum_k p(\theta|z=k)p(z=k)} \\
+                & = \frac{\sum_k p(\theta,z=k|D)}{\sum_k p(z=k)} \\
+                & = \sum_k p(\theta,z=k|D) \\
+                & = \sum_k p(z=k|D)p(\theta|D,z=k)
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Optimal threshold on classification probability. \\
+a. What is $\theta$ as a function of $\lambda_{01}$ and $\lambda_{10}$?}
+
+The model can be expressed as
+
+$$p(y|x) = 1 - p(y=0|x) = p(y=1|x) = p_1 = \hat{y}$$
+
+The loss function can be expressed as
+
+\begin{align}
+    L(y,\hat{y}) & = y(1 - \hat{y})\lambda_{01} + \hat{y}(1 - y)\lambda_{10} \\
+    L(0,\hat{y}) & = \hat{y}\lambda_{10} \\
+    L(1,\hat{y}) & = (1-\hat{y})\lambda_{01}
+\end{align}
+
+The quantity we are trying to minimize is the expected loss function. This
+is given by
+
+\begin{align}
+    E[L(y,\hat{y})] & = p_0L(0,\hat{y}) + p_1L(1,\hat{y}) \\
+                    & = p_0\hat{y}\lambda_{10} + p_1\lambda_{01}(1-\hat{y})
+\end{align}
+
+We can take the derivate with respect to $\hat{y}$ and set this to zero, which
+give us
+
+\begin{align}
+    0 & = \frac{d}{d\hat{y}}(p_0\lambda_{10}\hat{y} +
+                             p_1\lambda_{01}-\hat{y}p_1\lambda_{01}) \\
+      & = p_0\lambda_{10} - p_1\lambda_{01} \\
+    p_1\lambda_{01} & = p_0\lambda_{10} \\
+    p_1\lambda_{01} & = (1-p_1)\lambda_{10} \\
+    p_1\lambda_{01} + p_1\lambda_{10} & = \lambda_{10} \\
+    p_1(\lambda_{01} + \lambda_{10}) & = \lambda_{10} \\
+    p_1 & = \frac{\lambda_{10}}{\lambda_{01} + \lambda_{10}}
+\end{align}
+
+Thus we see that the decision boundary occurs when
+$p_1 = \frac{\lambda_{10}}{\lambda_{01} + \lambda_{10}}$. If $p_1$ is greater
+than this quantity, we will classify this with class $1$, and $0$ otherwise.
+
+\textbf{b. Show a loss matrix where the threshold is $0.1$.}
+
+This is accomplished by plugging in to the quantity derived above:
+
+\begin{align}
+    0.1 & = \frac{\lambda_{10}}{\lambda_{01} + \lambda_{10}} \\
+    0.1\lambda_{01} + 0.1\lambda_{10} & = \lambda_{10} \\
+    0.1\lambda_{01} & = 0.9\lambda_{10} \\
+    \lambda_{01} & = 9\lambda_{10}
+\end{align}
+
+Thus, a loss function of the following form will be sufficient:
+
+$$\begin{bmatrix}0 & 9\lambda_{10} \\ \lambda_{10} & 0 \end{bmatrix}$$
+
+}
+
+\exercise[]{
+\textbf{Reject option in classifiers. \\
+a. Show that the minimum risk is obtained if decide $Y=j$ if
+$p(Y=j|x)\geq p(Y=k|x)$ for all $k$ and
+$p(Y=j|x)\geq 1-\frac{\lambda_r}{\lambda_s}$.}
+
+Note that the first part of this has been shown above, namely that the most
+likely class will be chosen. The second part, the reject option, will be shown
+in this exercise.
+
+The expected posterior loss in this case is given by
+
+$$\rho(\hat{y}|x) = \sum_{k=1}^C p(y=k|x)L(y=k,\hat{y})$$
+
+Let's say that the correct class is $j$. Then, the posterior loss is
+
+\begin{align}
+    \rho(\hat{y}|x) & = \sum_{k=1}^C p(y=k|x)L(y=k,\hat{y}) \\
+    & = \sum_{k\neq j} p(y=k|x)\lambda_s \\
+    & = (1 - p(y=j|x))\lambda_s
+\end{align}
+
+We need to see when this quantity is better than the reject option. If the
+reject option is chosen, then the posterior loss is given by
+
+$$\rho(\hat{y}|x) = \sum_{k=1}^C p(y=k|x)\lambda_r = \lambda_r$$
+
+Thus for us not to choose the reject option,
+
+\begin{align}
+    (1 - p(y=j|x))\lambda_s & \geq \lambda_r \\
+    1 - p(y=j|x) & \geq \frac{\lambda_r}{\lambda_s} \\
+    1 - \frac{\lambda_r}{\lambda_s} & = p(y=j|x)
+\end{align}
+
+\textbf{b. Qualitatively describe what happens as $\lambda_r / \lambda_s$
+increases from $0$ to $1$.}
+
+Note that we will choose class $j$ if it is the most likely class and if
+
+$$p(y=j|x) \geq 1 - \frac{\lambda_r}{\lambda_s}$$
+
+When the quantity $\lambda_r / \lambda_s$ is $0$, this means that
+$\lambda_r = 0$. Note that $\lambda_r$ is the risk of rejection, and when
+this is $0$, we will choose to reject often. In fact, we will only choose not
+to reject when $p(y=j|x) = 1$.
+
+When the quantity is $1$, that means that the risk of rejection is infinitely
+high. Thus, this is equivalent to a classifier with no reject option.
+
+}
+
+\exercise[]{
+\textbf{Suppose it costs $\$10$ to misclassify and $\$3$ for a human to
+manually classify. \\
+a. Suppose $p(y=1|x) = 0.2$. Which decision minimizes expected loss?}
+
+The expected loss function is given by
+
+$$\rho(\hat{y}|x) = p_1L(1,\hat{y}) + (1-p_1)L(0,\hat{y})$$
+
+We can use this to plug in each decision
+
+\begin{align}
+    \rho(0|x) & = (1-0.2)\times 10 = 8 \\
+    \rho(1|x) & = 0.2\times 10 = 2 \\
+    \rho(r|x) & = 3
+\end{align}
+
+Thus, we would class this to class $0$.
+
+\textbf{b. Now suppose $p(y=1|x) = 0.4$.}
+
+Similarly we will plug the numbers in
+
+\begin{align}
+    \rho(0|x) & = (1-0.4)\times 10 = 6 \\
+    \rho(1|x) & = 0.4\times 10 = 4 \\
+    \rho(r|x) & = 3
+\end{align}
+
+Thus in this case, we will choose the reject option.
+
+\textbf{c. Show that there are thresholds $\theta_0$ and $\theta_1$ such that
+if $p_1 \leq \theta_0$, we will classify to $0$,
+$\theta_0 \leq p_1 \leq \theta_1$ we will classify as reject, and
+$p_1 \geq \theta_1$ we will classify as $1$.}
+
+Let's run through each decision
+
+\begin{align}
+    \rho(0|x) & = (1 - p_1)\times 10 = 10 - 10p_1 = \rho_0 \\
+    \rho(1|x) & = p_1\times 10 = 10p_1 = \rho_1 \\
+    \rho(r|x) & = 3 = \rho_r
+\end{align}
+
+Let's say the correct choice is class $0$. Then
+
+\begin{align}
+    & 10-10p_1\geq 10p_1\rightarrow 1-p_1 \geq p_1\rightarrow p_1\leq 0.5 \\
+    & 10p_1\leq 3\rightarrow p_1\leq 0.3
+\end{align}
+
+Now if the correct class is $1$, then
+
+\begin{align}
+    & 10p_1\geq 10-10p_1\rightarrow p_1\geq 1-p_1\rightarrow p_1\geq0.5 \\
+    & 10-10p_1\leq 3\rightarrow 1-p_1\leq 0.3\rightarrow p_1\geq 0.7
+\end{align}
+
+Thus, the thetas are $\theta_0 = 0.3$ and $\theta_1 = 0.7$.
+
+}
+
+\exercise[]{
+\textbf{Newsvendor problem}
+
+\begin{align}
+    E_{\pi}(Q) & = \int_Q^{\infty} (P-C)Qf(D)dD + \int_0^Q (P-C)Df(D)
+                - \int_0^Q C(Q-D)f(D)dD \\
+    & = (P-C)Q\int_Q^{\infty} f(D)dD + (P-C)\int_0^Q Df(D) dD
+        - CQ\int_0^Q f(D)dD + C\int_0^Q Df(D) dD \\
+    & = (P-C)Q(1-F(Q)) + P\int_0^Q Df(D) dD - CQ\int_0^Q f(D) dD \\
+    & = (P-C)Q(1-F(Q)) + P\int_0^Q Df(D) dD - CQF(Q) \\
+    & = (P-C)Q - (P-C)QF(Q) + P\int_0^Q Df(D) dD - CQF(Q) \\
+    & = (P-C)Q - PQF(Q) + CQF(Q) + P\int_0^Q Df(D) - CQF(Q) \\
+    & = (P-C)Q - PQF(Q) + P\int_0^Q Df(D) \\
+    & = (P-C)Q - PQF(Q) + PQF(Q) - P\int_0^Q F(D) dD \\
+    & = (P-C)Q - P\int_0^Q F(D) dD
+\end{align}
+
+Now we will take the derivate wrt $Q$. We then see that
+
+$$\frac{d}{dQ} (P-C)Q - P\int_0^Q F(D) dD = (P-C) - PF(Q)$$
+
+By setting this quantity to $0$, we see that
+
+\begin{align}
+    0 & = (P-C) - PF(Q) \\
+    PF(Q) & = (P-C) \\
+    F(Q) & = \frac{P-C}{P}
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Let $B = p(D|H_1)/p(D|H_0)$ be the Bayes factor of model 1. Suppose we
+plot two ROC curves, one computed by thresholding $B$, and the other computed
+by thresholding $p(H_1|D)$. Will they be the same or different?}
+
+If we threshold on $B$, we are saying that the decision rule is given by
+
+$$I(f(x) > B) = I(f(x) > \frac{p(D|H_1)}{p(D|H_0)})$$
+
+Compare this if we threshold with $p(H_1|D)$:
+
+$$I(f(x) > p(H_1|D))$$
+
+The domains are different for the two, but are they still
+monotonically related? We note that as $B$ increases to $\infty$, we
+favor $H_1$ more heavily. Thus it makes sense that as $B$ increases,
+so should $p(H_1|D)$.
+
+Similarly, as $B$ decreases towards $0$, so should $p(H_0|D)$ decrease as well.
+Thus, the ROC curves should be the same.
+
+}
+
+\exercise[]{
+\textbf{Bayes model averaging improves predictive accuracy.}
+
+For this exercise, note the following properties of KL-divergence:
+
+\begin{align}
+    KL(q||p) & = -\sum_x p(x)log\,q(x) + p(x)log\,p(x) \\
+             & = -\sum_x p(x)(log\,q(x) + log\,p(x)) \\
+             & = -\sum_x p(x)log\,q(x)p(x)
+\end{align}
+
+The expectation of the loss function of the plugin approximation is given by
+
+\begin{align}
+    E[L(\Delta, p^m)] & = E[-log(p^m(\Delta))] \\
+    & = E[-log(p(\Delta|m,D))] \\
+    & = -\sum_{m\in M} p(\Delta|m,D)p(m|D) log(p(\Delta|m,D))
+\end{align}
+
+The loss function of the Bayes model averaging estimate is given by
+
+\begin{align}
+    E[L(\Delta, p^{BMA})] & = E[-log(p^{BMA}(\Delta))] \\
+    & = -E[log(\sum_{m\in M}p(\Delta|m,D)p(m|D))] \\
+    & = -\sum_{m\in M}p(\Delta|m,D)p(m|D)log(\sum_{m\in M}p(\Delta|m,D)p(m|D))
+\end{align}
+
+One way to show that the Bayes model averaging is superior is to show that the
+difference between the two is $\geq 0$. So, if we take the difference,
+
+\begin{align}
+    E[L(\Delta, p^m)] - E[L(\Delta, p^{BMA})] & =
+    -\sum_{m\in M} p(\Delta|m,D)p(m|D) log(p(\Delta|m,D)) \\
+    & +\sum_{m\in M}p(\Delta|m,D)p(m|D)log(\sum_{m\in M}p(\Delta|m,D)p(m|D)) \\
+    & = -\sum_{m\in M}p(\Delta|m,D)p(m|D)(log\,p(\Delta|m,D)
+        +log\sum_{m\in M}p(\Delta|m,D)p(m|D)) \\
+    & = -\sum_{m\in M}p(m|D) \sum_{m\in M}p(\Delta|m,D)log\,p(\Delta|m,D)
+        \sum_{m\in M}p(\Delta|m,D)p(m|D) \\
+    & = -\sum_{m\in M}p(\Delta|m,D)log\,p(\Delta|m,D)
+        \sum_{m\in M}p(\Delta|m,D)p(m|D) \\
+    & = KL(p(\Delta|m,D), \sum_{m\in M}p(\Delta|m,D)p(m|D)) \\
+    & \geq 0
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{MLE and model selection for a 2d discrete distribution. \\
+a. Write down the joint probability distribution $p(x,y|\theta)$ as a
+$2\times 2$ table, in terms of $\theta = (\theta_1, \theta_2)$}
+
+The likelihood can be factorized as
+
+$$p(x,y|\theta) = p(y|x,\theta_2)p(x|\theta_1) = p(y|x,\theta_2)\theta_1$$
+
+Using the definition of $p(y|x,\theta_2)$ shown in the problem, this can
+be shown to be
+
+\begin{tabular}{ l | c r }
+     & y=0 & y=1 \\
+    \hline
+    x=0 & $\theta_1\theta_2$ & $\theta_1-(1-\theta_2)$ \\
+    x=1 & $\theta_1(1-\theta_2)$ & $\theta_1\theta_2$ \\
+\end{tabular}
+
+\textbf{b. With the given dataset, what is the MLE of $\theta_1$
+and $\theta_2$?}
+
+The MLE of $\theta_1$ is the proportion of $x$s that are $1$. This means
+that $\theta_1^{MLE} = \frac{4}{7}$.
+
+The MLE of $\theta_2$ is the proportion of times that $x$ and $y$ agree.
+This means that $\theta_2^{MLE} = \frac{2}{7}$.
+
+To compute the likelihood ($p(D|\hat{\theta},M_2)$), we can use the
+$2\times 2$ table to compute them. This gives us
+
+\begin{align}
+    p(D|\hat{\theta},M_2) & = \prod_{i=1}^N p(x_i,y_i|\hat{\theta})
+\end{align}
+
+Plugging in the data given, this is
+
+\begin{align}
+    p(D|\hat{\theta},M_2) & = \theta_1^7\theta_2^4(1-\theta_2)^3 \\
+                          & = \frac{4}{7}^7\frac{2}{7}^4(1-\frac{2}{7})^3
+\end{align}
+
+\textbf{c. Now consider a model with 4 parameters, representing
+$p(x,y|\theta) = \theta_{x,y}$. What is the MLE of $\theta$? What is
+$p(D|\hat{\theta},M_4)$ where $M_4$ denotes this 4-parameter model?}
+
+This situation is similar. Each $\theta_{x,y}$ is essentially one of the
+cells in the $2\times 2$ table. Thus the MLE of $\theta$ is given by
+
+\begin{align}
+    \hat{\theta}
+    & = \begin{bmatrix} \frac{1-\sum x}{N}\frac{1-\sum y}{N}(1-p(x)) \\
+                        \frac{1-\sum x}{N}\frac{\sum y}{N}(1-p(x)) \\
+                        \frac{\sum x}{N}\frac{1-\sum y}{N}(1-p(x)) \\
+                        \frac{\sum xy}{N}(1-p(x)) \end{bmatrix} \\
+    & = \begin{bmatrix} (3/7)(4/7)(1/2) \\
+                        (3/7)(3/7)(1/2) \\
+                        (4/7)(4/7)(1/2) \\
+                        (2/7)(1/2) \end{bmatrix} \\
+    & = \begin{bmatrix} 12/98 \\
+                        9/98 \\
+                        16/98 \\
+                        4/98 \end{bmatrix} \\
+\end{align}
+
+This needs to be normalized, and when it is it becomes
+
+\begin{align}
+    \hat{\theta}
+    & = \begin{bmatrix} 0.2926829268 \\
+                        0.2195121951 \\
+                        0.3902439024 \\
+                        0.09756097561 \end{bmatrix} \\
+\end{align}
+
+To compute the likelihood, we take the data, figure out which $\theta_{x,y}$
+is relevant, and take the product. Thus
+
+\begin{align}
+    p(D|\hat{\theta},M_4) & = \theta_{0,0}^2\theta_{0,1}
+                              \theta_{1,0}^2\theta_{1,1}^2 \\
+    & = 0.2926829268^2\times 0.2195121951\times 0.3902439024\times 0.09756097561^2
+\end{align}
+
+\textbf{d. Which model would be picked using leave-one-out CV?}
+
+This would be extremely tedious to calcualte for both models by hand, but we
+note that the second model has more parameters and thus would likely fit better
+(or at least as well). Thus, it is likely that the second model will be chosen
+for CV.
+
+\textbf{e. Compute the BIC for both models? Which model does it prefer?}
+
+The BIC is given by
+
+$$BIC(M, D) = p(D|\hat{\theta}) - \frac{dof(M)}{2}log N$$
+
+Let's look at the model complexity penalization term. For the two parameter
+model, this is given by
+
+$$\frac{2}{2}log N = log 7 \approx 0.845$$
+
+For the four parameter model, this is
+
+$$\frac{4}{2}log N = 2log 7 \approx 1.690$$
+
+Thus, for the four parameter model to be preferred, it would have to have
+a higher likelihood of $\geq log 7$. This is very unlikely (and is in fact
+not the case), so the BIC would prefer the simpler model.
+
+}
+
+\exercise[]{
+\textbf{Prove that the posterior median is the optimal estimate under L1 loss.}
+
+The median is given by
+
+\begin{align}
+    p(y < a | x) & = \int_{-\infty}^a p(y|x)
+                   = \int_{a}^{\infty} p(y|x) = p(y \geq a | x) = 0.5
+\end{align}
+
+The posterior expected loss under L1 loss is given by
+
+$$\rho(a|x) = E[abs(y-a)|x]$$
+
+By taking the derivative wrt $a$, we see that
+
+\begin{align}
+    \frac{d}{da} \rho(a|x) & = \frac{d}{da} E[abs(y-a)|x] \\
+    & = E[\frac{d}{da}abs(y-a)|x] \\
+    & = E[\frac{a-y}{|a-y|}|x] \\
+    & = \int \frac{a-y}{|a-y|} p(\frac{a-y}{|a-y|}|x) dx \\
+    & = \int sgn(a-y) p(sgn(a-y)|x) dx
+\end{align}
+
+So, the quantity we are minimizing is the sign of the quantity $a-y$. Note
+that $\forall a < y, sgn(a-y) = -1$ and $\forall a > y, sgn(a-y) = 1$. Thus
+the $a$s above $y$ "cancel out" the $a$s below $y$. Thus, we want to maximize
+the number of $a - y$ that cancel each other out. This will occur at the
+median.
+
+}
+
+\exercise[]{
+\textbf{If $L_{FN} = cL_{FP}$, show that we should pick $\hat{y} = 1$ iff
+$p(y=1|x)/p(y=0|x) > \tau$, where $\tau = \frac{c}{1+c}$.}
+
+The text here is misprinted. In the example they give, $c=2$, meaning that
+false negatives are twice as bad as false positives. They then say that this
+would cause the model to have a decision threshold of $2/3$, meaning that it
+would err on the side of saying negative. Since false negatives are more
+costly, this doesn't make sense.
+
+\begin{align}
+    \rho(\hat{y}=0|x) & = cL_{FP}p(y=1|x) \\
+    \rho(\hat{y}=1|x) & =  L_{FP}p(y=0|x) \\
+\end{align}
+
+We should pick class $1$ iff
+
+\begin{align}
+    \rho(\hat{y}=0|x) & > \rho(\hat{y}=1|x) \\
+    cL_{FP}p(y=1|x) & > L_{FP}p(y=0|x) \\
+    cp(y=1|x) & > p(y=0|x) \\
+    \frac{p(y=1|x)}{p(y=0|x)} & > \frac{1}{c}
+\end{align}
+
+The above equation makes more sense. Let $c=2$. This means that classifying
+something wrongly as negative is twice as bad as classifying something
+wrongly as positive. So, we should err on the side of classifying things as
+positive.
+
+In this case, we just have to show that the ratio is $> \frac{1}{2}$ before
+we classify as positive. This is in line with intuition.
+
+}
+
+\exerciseshere
