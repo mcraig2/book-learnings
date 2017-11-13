@@ -1,0 +1,376 @@
+\section{Linear Regression}
+
+\exercise[]{
+\textbf{Behavior of training set error with increasing sample size.}
+
+There are two sources of errors to be seen. One is measurement error, this is
+the irreducible error given in the noise of the problem. The other is
+approximation error, which is the error in finding the coefficients.
+
+When the sample size is small, the training set error will be overly optimistic
+of the measurement error. That is, the model may overfit and thus understate
+this error source. As training size increases, either the model must become
+much more complex (so as to continue overfitting), or the overfitting will
+stop and the measurement error will converge to the measurement error of the
+problem.
+
+As the model gets more complex, for a given sample size the approximation error
+will increase, since there are more parameters to estimate.
+
+Let's combine the two intuitions. For a complex model with small sample size,
+the measurement error will be understated and the approximation error will be
+higher. As the sample size increases, the measurement error will tend towards
+the problem definition and the approximation error will decrease. This will
+cause the training set error to increase to a plateau as sample size increases.
+
+}
+
+\exercise[]{
+\textbf{Compute the MLE for $W$ in the given data.}
+
+The weight matrix $W$ is given by
+
+$$W = (X^TX)^{-1}X^TY$$
+
+We are given a single $x$ vector that we expand using basis functions into
+
+$$X = \begin{bmatrix} \phi(0) \\ \phi(0) \\ \phi(0) \\
+                      \phi(1) \\ \phi(1) \\ \phi(1) \end{bmatrix}
+    = \begin{bmatrix} 1 & 0 \\ 1 & 0 \\ 1 & 0 \\
+                      0 & 1 \\ 0 & 1 \\ 0 & 1 \end{bmatrix}$$
+
+In order to compute the MLE, we need to compute the quantity $(X^TX)^{-1}$.
+This is given by
+
+\begin{align}
+    (X^TX)^{-1} = \left ( \begin{bmatrix} 1 & 0 \\ 1 & 0 \\ 1 & 0 \\
+                          0 & 1 \\ 0 & 1 \\ 0 & 1 \end{bmatrix}^T
+                          \begin{bmatrix} 1 & 0 \\ 1 & 0 \\ 1 & 0 \\
+                          0 & 1 \\ 0 & 1 \\ 0 & 1 \end{bmatrix} \right )^{-1}
+                = \begin{bmatrix} 3 & 0 \\ 0 & 3 \end{bmatrix}^{-1}
+            = \begin{bmatrix} \frac{1}{3} & 0 \\ 0 & \frac{1}{3} \end{bmatrix}
+\end{align}
+
+We use this quantity to compute the weight matrix:
+
+\begin{align}
+    W & = (X^TX)^{-1}X^TY \\
+      & = \begin{bmatrix} \frac{1}{3} & 0 \\ 0 & \frac{1}{3} \end{bmatrix}
+          \begin{bmatrix} 1 & 0 \\ 1 & 0 \\ 1 & 0 \\
+                          0 & 1 \\ 0 & 1 \\ 0 & 1 \end{bmatrix}^T
+          \begin{bmatrix} -1 & -1 \\ -1 & -2 \\ -2 & -1 \\
+                           1 &  1 \\  1 &  2 \\  2 &  1 \end{bmatrix} \\
+      & = \begin{bmatrix} \frac{1}{3} & 0 \\ 0 & \frac{1}{3} \end{bmatrix}
+          \begin{bmatrix} -4 & -4 \\ 4 & 4 \end{bmatrix}
+      & = \begin{bmatrix} -\frac{4}{3} & -\frac{4}{3} \\
+                           \frac{4}{3} &  \frac{4}{3} \end{bmatrix}
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Derive the MLE for ridge regression if the input is mean centered.}
+
+The formula for the model is given by
+
+$$J(w,w_0) = (y - Xw - w_01)^T (y - Xw - w_01) + \lambda w^Tw$$
+
+We must optimize this for both $w$ and $w_0$. The key to this is to understand
+that the mean of a matrix can be given by
+
+$$\bar{X} = (1^T1)^{-1}1^TX$$
+
+since $(1^T1) = N$, which means $(1^T1)^{-1} = 1/N$, and $1^TX = \sum_i X$. So,
+if $X$ is mean centered, then this quantity is $0$.
+
+Let's optimize for $w_0$ first:
+
+\begin{align}
+    \frac{d}{w_0} J(w,w_0) & = \frac{d}{w_0} (y^Ty - y^TXw - y^Tw_01 - w^TX^Ty + \\
+                  & w^TX^TXw + w^TX^Tw_01 - 1^Tw_0^Ty + 1^Tw_0^TXw +
+                  1^Tw_0^Tw_01 + \lambda w^Tw) \\
+    & = \frac{d}{w_0}(-y^Tw_01 + w^TX^Tw_01 -1^Tw_0^Ty + 1^Tw_0^TXw + 1^Tw_0^Tw_01) \\
+    & = -1^Ty + w^TX^T - 1^Ty + w^TX^T + 2w_01^T1 \\
+    & = -2^Ty + 2w^TX^T + 2w_01^T1
+\end{align}
+
+Setting this equal to $0$ we get
+
+\begin{align}
+    0 & = -2^Ty + 1^Tw^TX^T + 2w_01^T1 \\
+      & = -1^Ty + 1^Tw^TX^T + w_01^T1 \\
+    w_01^T1 & = 1^Ty + w^TX^T \\
+    w_0 & = (1^T1)^{-1}1^Ty + (1^T1)^{-1}1^Tw^TX^T \\
+        & = (1^T1)^{-1}1^Ty \\
+        & = \bar{y}
+\end{align}
+
+Now let's look at $w$. Optimizing for this we get
+
+\begin{align}
+    \frac{d}{w} J(w,w_0) & = \frac{d}{w} (y^Ty - y^TXw - y^Tw_01 - w^TX^Ty + \\
+                  & w^TX^TXw + w^TX^Tw_01 - 1^Tw_0^Ty + 1^Tw_0^TXw +
+                  1^Tw_0^Tw_01 + \lambda w^Tw) \\
+    & = \frac{d}{w} (-y^TXw - w^TX^Ty + w^TX^TXw + w^TX^Tw_01 +
+                     1^Tw_0^TXw + \lambda w^Tw) \\
+    & = -y^TX - y^TX + 2X^TXw + 1^Tw_0^TX + 1^Tw_0^TX + 2\lambda w \\
+    & = -2y^TX + 2^Tw_0^TX + 2\lambda w + 2X^TXw \\
+    & = -y^TX + 1^Tw_0^TX + \lambda w + X^TXw \\
+    & = (X^TX + \lambda I)w - y^TX + 1^T\bar{y}^TX \\
+    & = (X^TX + \lambda I)w - (y^T + 1^T\bar{y}^T)X \\
+    & = (X^TX + \lambda I)w - (y^T + ||y||)X
+\end{align}
+
+Setting this equal to $0$ we get
+
+\begin{align}
+    0 & = (X^TX + \lambda I)w - (X^Ty + X^Tw_0)^T \\
+    (X^TX + \lambda I)w & = (X^Ty + X^T(y^T - w^TX))^T \\
+    (X^TX + \lambda I)w & = (X^Ty + X^Ty^T - X^Tw^TX)^T \\
+    (X^TX + \lambda I)w & = (X^T(y + y^T - w^TX))^T
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Show that the MLE for the error variance in linear regression is
+given by the empircal variance of the residual errors.}
+
+Each residual is i.i.d and normal. Therefore, the likelihood is given by
+
+\begin{align}
+    L(y,\hat{y}) & = \prod_{i=1}^N N(y - w^Tx, \sigma^2) \\
+    log\,L(y,\hat{y}) & = \sum_{i=1}^N log\,N(y-w^Tx,\sigma^2) \\
+    & =-\sum_{i=1}^Nlog(\sqrt{2\pi\sigma^2})+\frac{(y_i-w^Tx_i)^2}{2\sigma^2} \\
+    & =-Nlog(\sqrt{2\pi\sigma^2})+\sum_{i=1}^N \frac{(y_i-w^Tx_i)^2}{2\sigma^2}
+\end{align}
+
+Taking the derivative of this wrt $\sigma^2$, we get
+
+\begin{align}
+    \frac{d}{d\sigma^2} (-Nlog(\sqrt{2\pi\sigma^2}) +
+           \sum_{i=1}^N \frac{(y_i-w^Tx_i)^2}{2\sigma^2})
+    = -\frac{N}{2\sigma^2} + \frac{(y_i-w^Tx_i)^2}{2\sigma^4} \\
+\end{align}
+
+Setting this to zero, get get
+
+\begin{align}
+    0 & = -\frac{N}{2\sigma^2} + \frac{(y_i-w^Tx_i)^2}{2\sigma^4} \\
+    \frac{N}{2\sigma^2} & = \frac{(y_i-w^Tx_i)^2}{2\sigma^4} \\
+    2N\sigma^4 & = 2\sigma^2(y_i-w^Tx_i)^2 \\
+    N\sigma^2 & = (y_i-w^Tx_i)^2 \\
+    \sigma^2 & = \frac{1}{N} \sum_{i=1}^N (y_i-w^Tx_i)^2
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Derive the MLE for the offset term in linear regression.}
+
+The loss function with the offset term separated is given by
+
+$$L(y,\hat{y}) = \frac{1}{N} \sum_{i=1}^N (y-w^Tx_i-w_0)^T(y-w^Tx_i-w_0)$$
+
+Taking the derivative of this with respect to $w_0$ we get
+
+\begin{align}
+    \frac{d}{dw_0} L(y,\hat{y}) & = \frac{1}{N} \sum_{i=1} y - w^Tx_i - w_0
+\end{align}
+
+Setting this to $0$ we see that
+
+\begin{align}
+    0 & = \frac{1}{N} \sum_{i=1}^N y - w^Tx_i - w_0 \\
+    w_0 & = \frac{1}{N} \sum_{i=1}^N y - w^Tx_i \\
+    & = \bar{y} - \bar{x}^Tw
+\end{align}
+
+If we similarly solve for $w$, then
+
+\begin{align}
+    \frac{d}{dw} L(y,\hat{y}) & = \frac{d}{dw} ((y-w^TX-w_0)^T(y-w^TX-w_0)) \\
+    & = 2(y-w^TX-w_0)X^T \\
+    & = (2y - 2w^TX - 2w_0)X^T \\
+    & = 2X^Ty - 2w^TX^TX - 2w_0X^T
+\end{align}
+
+Setting this equal to $0$ we get
+
+\begin{align}
+    0 & = 2X^Ty - 2w^TX^TX - 2w_0X^T \\
+    wX^TX & = X^Ty - w_0X^T \\
+    w & = (X^TX)^{-1}X^Ty - (X^TX)^{-1}w_0X^T \\
+      & = (X^TX)^{-1}X^Ty - (X^TX)^{-1}(\bar{y}-\bar{X}^Tw)X^T \\
+      & = (X^TX)^{-1}X^Ty - (X^TX)^{-1}X^T\bar{y} + (X^TX)^{-1}\bar{X}^TwX^T \\
+      & = (X^TX)^{-1}X^T(y-\bar{y}) + (X^TX)^{-1}\bar{X}^TwX^T \\
+    w - (X^TX)^{-1}\bar{X}X^Tw & = (X^TX)^{-1}X^Ty_c \\
+    w(1 - (X^TX)^{-1}\bar{X}X^T) & = (X^TX)^{-1}X^Ty_c \\
+    w & = (1-(X^TX)^{-1}\bar{X}X^T)^{-1}(X^TX)^{-1}X^Ty_c \\
+    & = (X^TX)^{-1}X^Ty_c - (\bar{X}X^T)^{-1}(X^TX)(X^TX)^{-1}X^Ty_c \\
+    & = (X^TX)^{-1}X^Ty_c - (\bar{X}X^T)X^Ty_c \\
+    & = ((X-\bar{X})^T(X-\bar{X}))^{-1}((X-\bar{X})^T)y_c \\
+    & = (X_c^TX_c)^{-1}X_cy_c
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Derive the MLE for simple linear regression.}
+
+Simple linear regression is just linear regression in the 1d case. The loss
+function is given by
+
+\begin{align}
+    L(y,\hat{y}) & = \frac{1}{2} \sum_{i=1}^N (y_i - w_1x_i - w_0)^2
+\end{align}
+
+where we use $\frac{1}{2}$ instead of $\frac{1}{N}$ because this will be easier
+to take the derivative of. Taking the derivative wrt $w_0$, we get
+
+\begin{align}
+    \frac{d}{dw_1} L(y,\hat{y}) & =
+    \frac{d}{dw_1} \frac{1}{2} \sum_{i=1}^N (y_i - w_1x_i - w_0)^2 \\
+    & = \sum_{i=1}^N y_i - w_1x_i - w_0
+\end{align}
+
+Setting this equal to $0$, we get
+
+\begin{align}
+    0 & = \sum_{i=1}^N y_i - w_1x_i - w_0 \\
+    Nw_0 & = \sum_{i=1}^N y_i - w_1x_i \\
+    w_0 & = \frac{1}{N} \sum_{i=1}^N y_i - \frac{1}{N}w_1 \sum_{i=1}^N x_i \\
+    & = \bar{y} - w_1\bar{x}
+\end{align}
+
+Taking the derivative of the loss function wrt $w_1$, we get
+
+\begin{align}
+    \frac{d}{dw_1} L(y,\hat{y}) & =
+    \frac{d}{dw_1} \frac{1}{2} \sum_{i=1}^N (y_i - w_1x_i - w_0)^2 \\
+    & = \sum_{i=1}^N (y_i - w_1x_i - w_0)x_i
+\end{align}
+
+Setting this equal to $0$, we get
+
+\begin{align}
+    0 & = \sum_{i=1}^N (y_i - w_1x_i - w_0)x_i \\
+    & = \sum_{i=1}^N y_ix_i - w_1x_i^2 - w_0x_i \\
+    w_1\sum_{i=1}^N x_i^2 & = \sum_{i=1}^N x_iy_i - (\bar{y}-w_1\bar{x})x_i \\
+    w_1\sum_{i=1}^N x_i^2 & = \sum_{i=1}^N x_iy_i - \bar{y}\sum_{i=1}^N x_i
+                               + w_1\bar{x} \sum_{i=1}^N x_i \\
+    w_1\sum_{i=1}^N x_i^2 & = \sum_{i=1}^N x_iy_i - N\bar{x}\bar{y}
+                               + Nw_1\bar{x}^2 \\
+                              + Nw_1\bar{x}^2 \\
+    w_1\sum_{i=1}^N x_i^2 - Nw_1\bar{x}^2 & =\sum_{i=1}^N x_iy_i-N\bar{x}\bar{y} \\
+    w_1(\sum_{i=1}^N x_i^2-N\bar{x}^2) & = \sum_{i=1}^N x_iy_i-N\bar{x}\bar{y} \\
+    w_1 & = \frac{\sum_{i=1}^N x_iy_i - N\bar{x}\bar{y}}
+                         {\sum_{i=1}^N x_i^2 - N\bar{x}^2}
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Sufficient statistics for online linear regression. \\
+a. What are the minimal set of statistics that we need to estimate $w_1$?}
+
+Using the definitions defined in the problem text, we see that
+
+\begin{align}
+    w_1 & = \frac{\sum_i (x_i - \bar{x})(y_i - \bar{y})}{\sum_i (x_i - \bar{x})^2}
+          = \frac{NC_{xy}^{(n)}}{NC_{xx}^{(n)}}
+          = \frac{C_{xy}^{(n)}}{C_{xx}^{(n)}}
+\end{align}
+
+\textbf{b. What are the minimal set of statistics that we need to estimate $w_0$?}
+
+We can see that
+
+\begin{align}
+    w_0 & = \bar{y} - w_1\bar{x} = \bar{y}^{(n)} -
+              \frac{C_{xy}^{(n)}}{C_{xx}^{(n)}}\bar{x}^{(n)}
+\end{align}
+
+\textbf{c. Derive equation for online updating $\bar{y}$.}
+
+We see that
+
+\begin{align}
+    \bar{y}^{(n+1)} & = \frac{1}{n+1}\sum_{i=1}^{n+1} y_i \\
+    & = \frac{1}{n+1}(n\bar{y} + y_{n+1}) \\
+    & = \frac{n}{n+1}\bar{y} + \frac{1}{n+1}y_{n+1} \\
+    & = \bar{y} - \frac{1}{n+1}\bar{y} + \frac{1}{n+1}y_{n+1} \\
+    & = \bar{y} - \frac{1}{n+1}(\bar{y} + y_{n+1})
+\end{align}
+
+\textbf{d. Derive the update equation for $C_{xy}$}
+
+\begin{align}
+    C_{xy}^{(n+1)} & = \frac{1}{n+1}\sum_{i=1}^{n+1}
+                       (x_i-\bar{x}^{(n+1)})(y_i-\bar{y}^{(n+1)}) \\
+    & = \frac{1}{n+1}(x_{n+1}-\bar{x}^{(n+1)})(y_{n+1}-\bar{y}^{(n+1)}) +
+        \frac{1}{n+1}\sum_{i=1}^n (x_i-\bar{x}^{(n+1)})(y_i-\bar{y}^{(n+1)}) \\
+    & = \frac{1}{n+1}(x_{n+1}y_{n+1} - x_{n+1}\bar{y}^{(n+1)} -
+                      y_{n+1}\bar{x}^{(n+1)} + \bar{x}^{(n+1)}\bar{y}^{(n+1)}) \\
+    & + \frac{1}{n+1}\sum_{i=1}^n (x_iy_i-x_i\bar{y}^{(n+1)}-y_i\bar{x}^{(n+1)}
+                                   -\bar{x}^{(n+1)}\bar{y}^{(n+1)})
+\end{align}
+
+By plugging in the equation we derived in part c., we can see that
+
+\begin{align}
+    C_{xy}^{(n+1)} & = \frac{1}{n+1}\left [
+        x_{n+1}y_{n+1}+nC_{xy}^{(n)}+n\bar{x}^{(n)}\bar{y}^{(n)}
+        -(n+1)\bar{x}^{(n+1)}\bar{y}^{(n+1)} \right ]
+\end{align}
+
+\textbf{Parts e. and f. can be found in the IPython notebook ch7-7.ipynb}
+
+}
+
+\exercise[]{
+\textbf{Bayesian linear regression in 1d with known $\sigma^2$ \\
+a. Compute unbiased estimate of $\hat{\sigma}^2$, using $w$ as the MLE.}
+
+This is implemented in code in the IPython notebook ch7-8.ipynb.
+
+\textbf{b. Assume $p(w) = p(w_0)p(w_1)$, and $p(w_0)$ is uniform and $p(w_1)$
+is $N(0,1)$. What is $p(w)$?}
+
+An uniformative uniform prior can be expressed as a normal with infinite
+variance (or zero precision). Thus
+
+\begin{align}
+    p(w) & = N(0,\infty)N(0,1) \\
+         & = N(\begin{bmatrix} 0 \\ 0 \end{bmatrix},
+             \begin{bmatrix} \infty & 0 \\ 0 & 1 \end{bmatrix})
+\end{align}
+
+\textbf{c. Compute the marginal posterior of the slope $p(w_1|D,\sigma^2)$.
+What is $E[w_1|D,\sigma^2]$ and $var[w_1|D,\sigma^2]$?}
+
+Using the results from 7.6.1, we see that the posterior is given by
+
+\begin{align}
+    p(w|x,y,\sigma^2) & = N(w|w_N,V_N) \\
+    w_N & = \frac{1}{\sigma^2}V_N\sum_{i=1}^N x_iy_i \\
+    V_N & = \frac{\sigma^2}{\sigma^2 + \sum_{i=1}^N x_i^2}
+\end{align}
+
+By plugging in the data provided, we get
+
+$$p(w|x,y,\sigma^2) = N(w|0.012567,0.000407)$$
+
+These two parameters to the distribution are the expected value and the
+variance, respectively,
+
+\textbf{d. What is a $95\%$ credible interval for $w_1$?}
+
+Since the posterior is Gaussian, we note that the $95\%$ credible interval is
+given by $\mu \pm 1.96\sigma^2$. From the numbers given, this is
+
+$$0.012567 \pm 1.96 \times 0.000407 = [0.01176928, 0.01336472]$$
+
+}
+
+\exerciseshere

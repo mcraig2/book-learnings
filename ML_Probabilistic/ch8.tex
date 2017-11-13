@@ -1,0 +1,238 @@
+\section{Logistic Regression}
+
+\exercise[]{
+\textbf{Spam classification using logistic regression.}
+
+This exercise is written in the IPython notebook ch8-1-2.ipynb.
+
+}
+
+\exercise[]{
+\textbf{Spam classification using Naive Bayes.}
+
+This exercise is written in the IPython notebook ch8-1-2.ipynb.
+
+}
+
+\exercise[]{
+\textbf{Gradient and Hessian of log-likelihood for multinomial logistic regression. \\
+a. Derive the derivative of the sigmoid function.}
+
+The sigmoid function is given by
+
+$$\sigma(a) = \frac{1}{1+e^{-a}}$$
+
+Taking the derivative of this, we get
+
+\begin{align}
+    \frac{d}{da} \sigma(a) & = \frac{d}{da} \frac{1}{1+e^{-a}} \\
+    & = -\frac{1}{(1+e^{-a})^2} \frac{d}{da} (1+e^{-a}) \\
+    & = -\frac{1}{(1+e^{-a})^2)} \times -e^{-a} \\
+    & = \frac{e^{-a}}{(1+e^{-a})^2} \\
+    & = e^{-a} \sigma(a)^2 \\
+    & = (\frac{1}{\sigma(a)} - 1) \sigma(a)^2 \\
+    & = \sigma(a)(1 - \sigma(a))
+\end{align}
+
+\textbf{b. Using the previous result and chain rule of calculus, derive an
+expression for the gradient of the log likelihood.}
+
+The NLL is given by
+
+$$NLL(w) = \sum_{i=1}^N log(1 + exp(-\tilde{y}_iw^Tx_i))$$
+
+The gradient of this is the derivative of this wrt $w$, which is
+
+\begin{align}
+    \frac{d}{dw} NLL(w) & = \frac{d}{dw} \sum_{i=1}^N
+                            log(1 + exp(-\tilde{y}_iw^Tx_i)) \\
+    & = \sum_{i=1}^N \sigma(\tilde{y}_iw^Tx_i)x_i\tilde{y}_i
+\end{align}
+
+We note that $\tilde{y} \in [-1, 1]$. Therefore, when $\tilde{y} = 1$ we get
+
+$$\frac{d}{dw} NLL(w) = \sum_{i=1}^N \sigma(w^Tx_i)x_i = \sum_{i=1}^N \mu_ix_i$$
+
+and when $\tilde{y} = -1$ we get
+
+$$\frac{d}{dw} NLL(w) = -\sum_{i=1}^N \sigma(-w^Tx_i)x_i =
+                        -\sum_{i=1}^N (1 - \sigma(w^Tx_i))x_i =
+                        -\sum_{i=1}^N (1 - \mu_i)x_i$$
+
+Therefore, using the fact that $y \in [0, 1]$, we can rewrite this as
+
+$$\frac{d}{dw} NLL(w) = \sum_{i=1}^N (\mu_i - y_i)x_i$$
+
+\textbf{c. Prove that the Hessian is positive definite.}
+
+The Hessian is given by
+
+$$H = X^TSX$$
+
+where $S = diag(\mu_1(1-\mu_1), ..., \mu_n(1-\mu_n))$. Since we know that
+$0 \geq \mu_i \leq 1$, we know that $S$ is positive. Therefore
+
+\begin{align}
+    H & = X^TSX \\
+      & = tr(X^TSX) \\
+      & = \sum_i \sum_j X_{ij} S_{ij} X_{ij} \\
+      & = \sum_i \sum_j X_{ij}^2 S_{ij}
+\end{align}
+
+Since $X_{ij}^2 \geq 0 \, \forall X_{ij}$, then $H$ must be positive definite.
+
+}
+
+\exercise[]{
+\textbf{Gradient and Hessian of log-likelihood for multinomial logistic regression. \\
+a. Derive the Jacobian of the softmax.}
+
+The softmax function is given by
+
+$$S(\eta_i)_k = \frac{e^{\eta_{ik}}}{\sum_{j=1}^J e^{\eta_{ij}}}$$
+
+Let's look at the derivative in the case where $\eta_{ij} = \eta_{ik}$. In
+this case, the derivative is
+
+\begin{align}
+    \frac{\partial \mu_{ik}}{\partial \eta_{ij}} =
+    \frac{\partial \mu_{ij}}{\partial \eta_{ij}} & =
+    \frac{\partial}{\partial \eta_{ij}}
+        \frac{e^{\eta_{ij}}}{\sum_{j=1}^J e^\eta_{ij}} \\
+    & = \frac{e^{\eta_{ij}}}{\sum_{j=1}^J e^{\eta_{ij}}} -
+    \frac{e^{2\eta_{ij}}}{(\sum_{j=1}^J e^{\eta_{ij}})^2}
+\end{align}
+
+Now let's look at the case when $\eta_{ij} \neq \eta_{ik}$. In this case, the
+derivative is
+
+\begin{align}
+    \frac{\partial \mu_{ik}}{\partial \eta_{ij}} & =
+    -\frac{e^{\eta_{ik}+\eta_{ij}}}{(\sum_{j=1}^J e^{\eta_{ij}})^2}
+\end{align}
+
+We can combine these into one equation using $\delta_{jk} = I(j = k)$ as follows:
+
+\begin{align}
+    \frac{\partial \mu_{ik}}{\partial \eta_{ij}} & =
+    \delta_{jk} \left ( \frac{e^{\eta_{ij}}}{\sum_{j=1}^J e^{\eta_{ij}}} -
+    \frac{e^{\eta_{ij}+\eta_{ik}}}{(\sum_{j=1}^J e^{\eta_{ij}})^2} \right )
+    -(1-\delta_{jk})\frac{e^{\eta_{ik}+\eta_{ij}}}{(\sum_{j=1}^J e^{\eta_{ij}})^2} \\
+    & = \delta_{jk}(\mu_{ij}-\mu_{ij}\mu_{ik}) - (1-\delta_{jk})\mu_{ij} \mu_{ik} \\
+    & = \delta_{jk}\mu_{ij}-\delta_{jk}\mu_{ij}\mu_{ik}
+      - \mu_{ij}\mu_{ik} + \delta_{jk}\mu_{ij}\mu_{ik} \\
+    & = \delta_{jk}\mu_{ij} - \mu_{ij}\mu_{ik} \\
+    & = \mu_{ij}(\delta_{jk} - \mu_{ik})
+\end{align}
+
+\textbf{b. Show that $\bigtriangledown_{w_c}l = \sum_i (y_{ic}-\mu_{ic})x_i$.}
+
+The log likelihood is given by
+
+\begin{align}
+    l(W) & = \sum_{i=1}^N \left [ \left ( \sum_{c=1}^C y_{ic}w_c^Tx_i \right )
+             - log \left ( \sum_{c'=1}^C exp(w_{c'}^Tx_i) \right ) \right ] \\
+    & = \sum_{i=1}^N \sum_{c=1}^C y_{ic}w_c^Tx_i
+      - \sum_{i=1}^N log \sum_{c'=1}^C exp(w_{c'}^Tx_i)
+\end{align}
+
+The likelihood for a particular class $c$ is given by
+
+\begin{align}
+    l(w_c) & = \sum_{i=1}^N y_{ic}w_c^Tx_i
+             - \sum_{i=1}^N log \sum_{c'=1}^C exp(w_{c'}^Tx_i) \\
+    & = w_c\sum_{i=1}^N y_{ic}x_i
+      - \sum_{i=1}^N log \sum_{c'=1}^C exp(w_{c'}^Tx_i) \\
+\end{align}
+
+Taking the derivative of this wrt $w_c$, we get
+
+\begin{align}
+    \bigtriangledown_{w_c} l & = \sum_{i=1}^N y_{ic}x_i
+    - \sum_{i=1}^N x_i\frac{e^{w_c^Tx_i}}{\sum_{c'=1}^C e^{w_{c'}^Tx_i}} \\
+    & = \sum_{i=1}^N y_{ic}x_i - \mu_{ic}x_i \\
+    & = \sum_{i=1}^N (y_{ic} - \mu_{ic})x_i
+\end{align}
+
+\textbf{c. Derive the block submatrix of the Hessian for the classes
+$c$ and $c'$.}
+
+We must take the derivative of the equation derived above.
+
+\begin{align}
+    \bigtriangledown_{w_c}^2 l = \bigtriangledown_{w_c} \bigtriangledown_{w_c} l
+    & = \bigtriangledown_{w_c} \sum_{i=1}^N (y_{ic} - \mu_{ic})x_i \\
+    & = -\sum_{i=1}^N \mu_{ic}(\delta_{cc'} - \mu_{ic'})x_i
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Symmetric version of $l_2$ regularized multinomial logistic regression.}
+
+In this problem, we are asked to optimize a regularized multinomial model,
+where the problem is overspecified (there are $C$ parameters and only $C-1$
+degrees of freedom). In particular we are asked to optimize
+
+\begin{align}
+    \sum_{i=1}^N log\,p(y_i|x_i,W) - \lambda \sum_{c=1}^C w_c^Tw_c
+    = \sum_{i=1}^N w_{c0} + w_c^Tx_i - log(\sum_{c=1}^C e^{w_{c0} + w_c^Tx_i})
+      - \lambda \sum_{c=1}^C w_c^Tw_c
+\end{align}
+
+Using the definition of the gradient defined in previous problems, we can
+derive the derivative of this optimizer wrt $w$ as
+
+\begin{align}
+    \frac{d}{w_c} \sum_{i=1}^N log\,p(y_i|x_i,W) - \lambda \sum_{c=1}^C w_c^Tw_c
+    & = \sum_{i=1}^N (y_{ic} - \mu_{ic})x_i - 2\lambda w_c
+\end{align}
+
+Note that at the optimum, the gradient is necessarily $0$. Thus we have
+
+\begin{align}
+    0 & = -2\lambda w_c \\
+    w_c & = \sum_{j=1}^J w_{cj} = 0
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Elementary properties of $l_2$ regularized logistic regression. \\
+a. The cost function has multiple locally optimal solutions.}
+
+This is False. For this to be false, the cost function would have to be convex.
+That occurs when the Hessian is strictly positive. The likelihood is convex,
+as is shown in the text, so the Hessian of the regularization term need be
+strictly positive. The Hessian of this term is $\lambda$.
+
+\textbf{b. Let $\hat{w}$ be global optimum. $\hat{w}$ is sparse?}
+
+False. Regularization penalizes the weight vectors, but does not induce
+sparsity. Regularization pushes the weight vectors towards zero, but
+quadratically. Another way to think about this is that the curvature is
+positive, and therefore will only tend to zero at the limits.
+
+\textbf{c. If the training data is linearly separable, then some weights
+$w_j$ might become infinite if $\lambda = 0$.}
+
+This is true. If the data is linearly separable and there is no regularization,
+then the weights can go to infinity, since they control the steepness of the
+sigmoid curve. Regularization would prevent this, obvoiusly.
+
+\textbf{d. The likelihood on the training set always increases as
+we increase $\lambda$.}
+
+False. As we increase $\lambda$, we restrict degrees of freedom. Thus we
+incur bias on the training set for a reduction in variance.
+
+\textbf{d. The likelihood on the test set always increases as
+we increase $\lambda$.}
+
+False. As we increase $\lambda$, we do in fact perform better on the test
+set, but only to a point. At some point, the regularization term overwhelms,
+and the model becomes too rigid to be useful even on the test set.
+
+}
+
+\exerciseshere

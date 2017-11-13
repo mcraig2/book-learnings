@@ -16,12 +16,13 @@ The misclassification rate is given by
 Since the input $x$ tells us nothing about the output $y$, the best
 classification rate we could possibly do is $\frac{1}{K}$, where $K$ is
 the number of classes. Thus, in this case, the best we could do is
-$\frac{1}{2}$. This gives us
+$\frac{1}{2}$. For LOOCV, we see that this is given by
 
-\begin{align}
-    \frac{1}{N_1}\sum_{i=1}^{N_1} I(\hat{y}_i \neq y_i) +
-    \frac{1}{N_2}\sum_{i=1}^{N_2} I(\hat{y}_i \neq y_i)
-\end{align}
+$$R(m,D,N) = \frac{1}{N}\sum_{i=1}^N L(y_i,f_m^{-i}(x_i))$$
+
+Since the dataset is random, $f_m^{-i}(x_i) = f_m(x_i)$. This is identical
+to the equation above, which means that we would get the same answer from
+LOOCV as we did the simple misclassification rate in this case.
 
 }
 
