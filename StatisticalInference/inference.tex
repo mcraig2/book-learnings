@@ -1,0 +1,34 @@
+\documentclass{article}
+\usepackage{amsthm, amssymb, amsmath, tikz}
+
+\theoremstyle{remark}
+\newtheorem{ExInternal}{Exercise}[section]
+
+\makeatletter
+\let\@exercises\@empty%
+\newcommand\exercise[2][]{%
+    \g@addto@macro\@exercises{%
+        \begin{ExInternal}[#1]%
+            #2%
+        \end{ExInternal}%
+    }%
+}
+
+\newcommand\exerciseshere{%
+    \subsection*{Exercises}
+    \@exercises%
+    \global\let\@exercises\@empty%
+}
+
+\makeatother
+\begin{document}
+
+\title{Selected Exercises of Statistical Inference}
+\author{Mike Craig}
+\date{Last Updated \today}
+
+\maketitle
+
+\include{chapters/ch1}
+
+\end{document}

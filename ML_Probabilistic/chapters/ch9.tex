@@ -1,0 +1,32 @@
+\section{Generalized linear models and the exponential family}
+
+\exercise[]{
+\textbf{Conjugate prior for univariate Gaussian in exponential family form.}
+
+Let's start backwards. We are told that the conjugate prior is given by
+
+\begin{align}
+    N(\mu|\gamma,\lambda(2\alpha - 1))Ga(\lambda|\alpha,\beta) & \propto
+    exp(-\frac{\lambda(2\alpha-1)}{2}(\mu-\gamma)^2)
+    \lambda^{\alpha-1}exp(-\lambda\beta) \\
+    & = exp(-\frac{\lambda(2\alpha-1)}{2}(\mu-\gamma)^2 - \lambda\beta)
+        \lambda^{\alpha-1} \\
+    & = exp(-\frac{\lambda}{2}\left [ (2\alpha-1)(\mu-\gamma)^2 -
+        2\beta \right ]) \lambda^{\alpha-1}
+\end{align}
+
+In the problem, we are asked to parameterize this distribution using $\mu$
+and $\lambda = 1/\sigma^2$. Thus, the likelihood is given by
+
+\begin{align}
+    p(D|\mu,\lambda) & = \prod_{i=1}^N \frac{\lambda}{\sqrt{2\pi}}
+            exp(-\frac{\lambda}{2}(x_i-\mu)^2) \\
+    & = \lambda^N (2\pi)^{-N/2} \prod_{i=1}^N
+        exp(-\frac{\lambda}{2}(x_i-\mu)^2) \\
+    & = \lambda^N (2\pi)^{-N/2} exp(-\frac{\lambda}{2}
+        \sum_{i=1}^N (x_i-\mu)^2)
+\end{align}
+
+}
+
+\exerciseshere

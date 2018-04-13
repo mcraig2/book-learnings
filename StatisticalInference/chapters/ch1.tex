@@ -1,0 +1,644 @@
+\section{Probability Theory}
+
+\exercise[]{
+\textbf{For each, describe the sample space. \\
+(a) Toss a coin four times.}
+
+A sample in this case is a bit string of length four, where each digit represents
+a head or tails ($0$ for head, $1$ for tails, for example). Thus the sample space
+contains $2^4$ samples (e.g. $\left \{ 0110 \right \}$).
+
+\textbf{(b) Count the number of insect-damaged leaves on a plant.}
+
+The sample space contains all integers from $0$ to $\infty$. Practically, this
+can be reduced, since there are likely not $\infty$ leaves on a plant.
+
+\textbf{(c) Measure the lifetime (in hours) of a particular brand of light bulb.}
+
+Similar to (b), the sample space contains all integers from $0$ to $\infty$. Again,
+it is unlikely that the lifetime is $\infty$.
+
+\textbf{(d) Record the weights of 10-day-old rats.}
+
+The sample space here is all real-valued positive numbers (positive because
+a 10-day-old rat's weight will be $\ge 0$).
+
+\textbf{(e) Observe the population of defectives in a shipment of
+electronic components.}
+
+Let $n$ be the number of electronic components in a shipment. The population
+of defectives can be modeled as the proportion of defectives in the shipment,
+thereby making the sample space a real-valued number on the range
+$\left [ 0, 1 \right ]$. Alternatively, we can model the number of defectives
+directly, thereby making the sample space all integers on the range
+$\left [ 0, n \right ]$.
+
+}
+
+\exercise[]{
+\textbf{Verify the following identities. \\
+(a) $A \setminus B = A \setminus (A \cap B) = A \cap B^{c}$}
+
+We know that $A \setminus B = A \cap B^{c}$ from the definition of $A \setminus B$.
+From this, we can see that
+
+\begin{align}
+    A \setminus B & = A \cap B^{c} \\
+                  & = (A \cap A) \cap B^{c} \\
+                  & = A \cap (A \cap B^{c}) \\
+                  & = A \setminus (A \cap B)
+\end{align}
+
+\textbf{(b) $B = (B \cap A) \cup (B \cap A^{c})$}
+
+Using the distributive laws:
+
+\begin{align}
+    (B \cap A) \cup (B \cap A^{c}) & = B \cap (A \cup A^{c}) \\
+                                   & = B \cap S \\
+                                   & = B
+\end{align}
+
+\textbf{(c) $B \setminus A = B \cap A^{c}$}
+
+This is the definition of $B \setminus A$.
+
+\textbf{(d) $A \cup B = A \cup (B \cap A^{c})$}
+
+Using the distributive laws:
+
+\begin{align}
+    A \cup (B \cap A^{c}) & = (A \cup B) \cap (A \cup A^{c}) \\
+                          & = (A \cup B) \cap S \\
+                          & = A \cup B
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Finish the proof of Theorem 1.1.4}
+}
+
+\exercise[]{
+\textbf{For events $A$ and $B$, find formulas for the probabilties of the
+following events in terms of quantities $P(A)$, $P(B)$, and $P(A \cap B)$. \\
+(a) either $A$ or $B$ or both}
+
+This is given by
+
+\begin{align}
+    P(A \cup B) + P(A \cap B) & = P(A) + P(B) - P(A \cap B) + P(A \cap B) \\
+                              & = P(A) + P(B)
+\end{align}
+
+\textbf{(b) either $A$ or $B$ but not both}
+
+\begin{align}
+    P(A \cup B) & = P(A) + P(B) - P(A \cap B)
+\end{align}
+
+\textbf{(c) at least one of $A$ or $B$}
+
+\begin{align}
+    P(A \cup B \cup (A \cap B)) & = P(A) + P(B) - P(A \cup B) + P(A \cup B) \\
+    & = P(A) + P(B)
+\end{align}
+
+\textbf{(d) at most one of $A$ or $B$}
+
+\begin{align}
+    P(A \cup B) & = P(A) + P(B) - P(A \cap B)
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Twins. \\
+Given the following events: \\
+$A = \left \{ a US birth results in twin females \right \}$ \\
+$B = \left \{ a US birth results in identical twins \right \}$ \\
+$C = \left \{ a US birth results in twins \right \}$ \\
+(a) State in words, the event $A \cap B \cap C$.}
+
+$A \cap B \cap C$ represents the event that a US birth results in identical
+female twins.
+
+\textbf{(b) Find $P(A \cap B \cap C)$.}
+
+Among all US births, $1$ in $90$ are twins. Among all twins, $1$ in $3$ are
+identical. Among identical twins, females are as likely as males ($1$ in $2$).
+So, the probability that a given birth results in identical female twins are
+
+$$\frac{1}{90} \times \frac{1}{3} \times \frac{1}{2} = \frac{1}{540}$$
+
+So, $1$ in $540$ US births are identical twin females.
+
+}
+
+\exercise[]{
+\textbf{Two pennies, one $P(head) = u$, the other $P(head) = w$, are tossed. Define \\
+$p_0 = P(0 heads)$ \\
+$p_1 = P(1 head)$ \\
+$p_2 = P(2 head)$ \\
+Can $u$ and $w$ be picked such that $p_0 = p_1 = p_2$?}
+
+\begin{align}
+    p_0 & = (1 - u)(1 - w) = 1 - w - u + wu \\
+    p_1 & = u(1 - w) + w(1 - u) = u - wu + w - wu = u + w - 2wu \\
+    p_2 & = wu
+\end{align}
+
+Let's set $p_0 = p_2$. We then get
+
+\begin{align}
+    1 - w - u + wu & = wu \\
+    1 - u & = w
+\end{align}
+
+Plug this into $p_1 = p_2$:
+
+\begin{align}
+    u + w - 2wu & = wu \\
+    u + w & = 3wu \\
+    u + (1 - u) & = 3(1 - u)u \\
+    1 & = 3u - 3u^2 \\
+    \frac{1}{3} & = u - u^2
+\end{align}
+
+Thus, for $p_0 = p_1 = p_2$, we have to find the point at which the parabola
+$u - u^2 = \frac{1}{3}$. However, we note that the maximum of this parabola can
+be found by taking the derivative and setting equal to $0$:
+
+\begin{align}
+    \frac{d}{du} (u - u^2) & = 1 - 2u \\
+    0 & = 1 - 2u \\
+    2u & = 1 \\
+    u & = \frac{1}{2}
+\end{align}
+
+So, the parabola has a maximum of $\frac{1}{2}$, and therefore is never equal to
+$\frac{1}{3}$. So, there is no $u$ and $w$ such that $p_0 = p_1 = p_2$.
+
+}
+
+\exercise[]{
+\textbf{Referring to the dart example, suppose the wall is hit with probability
+$1$, and the wall has area $A$. \\
+(a) Using the fact that the probability of hitting a region is proportional
+to its area, construct a probability function for $P(scoring i points)$,
+$i = 0, ..., 5$ (No points are scored if the dart board is not hit.}
+
+The area of the dartboard with radius $r$ is given by: $\pi r^2$. Therefore,
+
+$$P(board is hit) = \frac{\pi r^2}{A}$$
+
+Note that in order to score a point, you have to hit the board, and then hit
+the slice of the board that contains that point. From Example 1.2.7 we already
+know the probability of scoring $i$ points when the board is definitely hit.
+This is given by
+
+$$P(scoring i points|board is hit) = \frac{(6-i)^2 - (5-i)^2}{5^2}$$
+
+Since it is only possible to score points if I first hit the board, the new
+probability of scoring $i$ points is given by
+
+\begin{align}
+    P(scoring i points) & = P(scoring i points | board is hit)P(board is hit) \\
+    & = \frac{\pi r^2 ((6 - i)^2 - (5 - i)^2)}{25A}
+\end{align}
+
+\textbf{(b) Show that the conditional probability
+$P(scoring i points | board is hit)$ is the probability distirubtion of
+Example 1.2.7}
+
+Using the definition of conditional probability, we get:
+
+\begin{align}
+    P(scoring i points | board is hit) & =
+    \frac{P(scoring i points, board is hit)}{P(board is hit)} \\
+    & = \frac{\pi r^2 ((6 - i)^2 - (5 - i)^2)}{5^2A}\frac{A}{\pi r^2} \\
+    & = \frac{(6-i)^2 - (6-i)^2}{5^2}
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{More darts.}
+}
+
+\exercise[]{
+\textbf{Prove the general version of DeMorgan's Laws.}
+
+Using induction, we can see that
+
+\begin{align}
+    (\bigcup_{i=1}^n A_i)^c & = A_1^c \cap (\bigcup_{i=2}^n A_i)^c \\
+    & = A_1^c \cap A_2^c \cap (\bigcup_{i=3}^n A_i)^c \\
+    & = ... \\
+    & = A_1^c \cap ... \cap A_{n-2}^c \cap (A_{n-1} \cup A_{n})^c \\
+    & = \bigcap_{i=1}^n A_i^c
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{More DeMorgan's.}
+}
+
+\exercise[]{
+\textbf{Let $S$ be a sample space. \\
+(a) Show that the collection $B = \left \{ \varnothing, S \right \}$ is
+a sigma algebra.}
+
+There are three requirements for a sigma algebra $B$:
+
+(I) $\varnothing \exists B$
+(II) If $A \exists B$, then $A^c \exists B$
+(III) If $A_1, A_2, ... \exists B$, then $\bigcup_{i=1}^{\infty} A_i \exists B$
+
+So, to show that $B = \left \{ \varnothing, S \right \}$ is a valid sigma algebra,
+we will show that it satisfies these three requirements.
+
+Requirement I is obvious, as $\varnothing$ is an element in $B$. Since
+$\varnothing^c = S$, and $S \exists B$, requirement II is satisfied. Finally,
+we note that $\varnothing \cup S = S$, and since $S \exists B$, requirement III
+is satisfied.
+
+\textbf{(b) Let $B = \left \{ all subsets of S, including S \right \}$. Show
+that $B$ is a sigma algebra.}
+
+$\varnothing$ is a subset of $S$, so requirement I is satisfied.
+
+All subsets include all complements, so requirement II is satisfied.
+
+$\bigcup_{i=1}^{\infty} A_i = S \exists B$, so requirement III is satisfied.
+
+\textbf{(c) Show that the intersection of two sigma algebras is a sigma
+algebra.}
+
+For requirement I, we note that $\varnothing \cap A = \varnothing \forall A$. So,
+requirement I is satisfied under intersection.
+
+For requirement II, we can use DeMorgan's Law. For any event $A_1 \exists B_1$
+and $A_2 \exists B_2$, $(A_1 \cap A_2)^c = A_1^c \cup A_2^c$. Since $B_1$ and $B_2$
+are both sigma algebras, they are both closed under complementation and union,
+and therefore requirement II is satisfied.
+
+For requirement III, we note that
+$(A \cap B) \cup (A \cap C) = A \cap (B \cup C) = A^c \cup (B \cup C)^c$. Since
+sigma algebras are closed under complementation and union, we know that
+$A^c \cup (B \cup C)^c \exists B$. So, requirement III is satisfied.
+
+}
+
+\exercise[]{
+\textbf{Statisticians in the deFinetti school. \\
+(a) Show that the Axiom of Countable Additivity implies Finite Additivity.}
+
+Axiom of Countable Additivity states that
+
+If $A_1, A_2, ... \exists B$ are pairwise disjoint, then
+$P(\bigcup_{i=1}^{\infty} A_i) = \sum_{i=1}^{\infty} P(A_i)$.
+
+Finite Additivity states that $P(A \cup B) = P(A) + P(B)$, if $A$ and $B$
+are disjoint.
+
+Assume that the Axiom of Countable Additivity is true. Then using induction,
+
+\begin{align}
+    P(\bigcup_{i=1}^{\infty} A_i) & = P(A_1 \cup \bigcup_{i=2}^{\infty} A_i) \\
+    & = P(A_1) + P(\bigcup_{i=2}^{\infty} A_i) \\
+    & = ... \\
+    & = \sum_{i=1}^{\infty} P(A_i)
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{If $P(A) = \frac{1}{3}$ and $P(B^c) = \frac{1}{4}$, can $A$ and $B$
+be disjoint?}
+
+Since $P(A) = \frac{1}{3}$ and $P(B) = 1 - P(B^c) = \frac{3}{4}$, then
+$A$ and $B$ cannot be disjoint, because $P(A) + P(B) = \frac{13}{12} > 1$.
+
+}
+
+\exercise[]{
+\textbf{Supersets.}
+}
+
+\exercise[]{
+\textbf{Finish proof of Theorem 1.2.14.}
+
+The text proved this for $k=2$. To prove the general, we can use induction. Let
+$k = K$. Each task $k_i \forall i \exists \left \{ 1, ..., K \right \}$ can
+be done $n_i$ ways. Let $N(i)$ be the number of ways to do $i$ tasks. Then
+
+\begin{align}
+    N(i) & = N(i - 1) \times n_i
+    N(i - 1) & = N(i - 2) \times n_{i-1}
+\end{align}
+
+Using the base case of $k=2$, we see that in general, the number of ways to do
+$k$ tasks is: $n_1 n_2 \cdots n_k$.
+
+}
+
+\exercise[]{
+\textbf{How many sets of initial are there if every person has one surname and \\
+(a) exactly two given names?}
+
+Here we have a string of length two, where each character can have 26 values. So,
+
+$$26 \times 26 = 676$$
+
+total initials.
+
+\textbf{(b) either one or two given names?}
+
+Here we have some people with initials of length 2, and some of length 3. So,
+
+$$(26^2) + (26^3) = 676 + 17576 = 18252$$
+
+total initials.
+
+\textbf{(c) either one or two or three given names?}
+
+Here we have some people with initials of length 2, some of length 3, and others
+with length 4. So,
+
+$$\sum_{i=2}^4 26^i = 676 + 17576 + 456976 = 475228$$
+
+total initials.
+
+}
+
+\exercise[]{
+\textbf{In dominos, there are two numbers, $\left \{ 1, ..., n \right \}$. Order
+does not matter. How mnay possible number pairs are there?}
+
+Since order does not matter, this is $n choose k$, where $k=2$. So,
+
+\begin{align}
+    \binom{n}{2} & = \frac{n!}{2!(n - 2)!} \\
+                 & = \frac{n \times (n - 1) \times (n - 2)!}{2 \times (n - 2)!} \\
+                 & = \frac{n \times (n - 1)}{2}
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{If $n$ balls are placed at random into $n$ cells, find the probability
+that exactly one cell remains empty.}
+
+We first note that there are $n^n$ ways to place $n$ balls into $n$ cells. So,
+this will likely be the denominator in our answer.
+
+Having one cell remain empty means that $n - 1$ cells contain one ball and one
+cell contains two balls. This means that each of the $n$ balls have to go into
+a specific cell. Once a ball is placed in a cell, there are only $n - 1$ cells
+left for the next one to go to, etc. So, there are $n!$ ways to place the $n$
+balls into the correct $n$ cells. Finally, it doesn't matter which cell is empty,
+just that there is one and only one. So, there has to be one cell that is empty
+and one cell that contains two balls. There are $\binom{n}{2}$ ways to choose
+these cells. So, the final answer is
+
+$$\binom{n}{2} \frac{n!}{n^n}$$
+
+}
+
+\exercise[]{
+\textbf{Partial derivatives. \\
+(a) How many fourth partial derivatives does a function of three variables have?}
+
+Each time you take a derivative, you can take a derivative any of the variables
+(and you can take a derivative of a particular variable more than once). This
+is the case of unordered sampling with replacement. We know from the text that
+in general this is given by
+
+$$\binom{n + r - 1}{r}$$
+
+So, there are
+
+$$\binom{3 + 4 - 1}{4} = 15$$
+
+fourth partial derivatives on a function of three variables.
+
+}
+
+\exercise[]{
+\textbf{Telephone rings.}
+}
+
+\exercise[]{
+\textbf{A closet contains $n$ pairs of shoes. If $2r$ shoes are chosen at random
+($2r < n$), what is the probability that there will be no matching pair in the
+sample?}
+
+There are $n$ pairs of shoes, or $2n$ single shoes. So, there are $\binom{2n}{2r}$
+total sample points (the denominator). For the numerator, we want to count the
+number of sample points for which we don't have a matching pair.
+
+If we choose a new pair with each $2r$, that would mean that we don't have a
+matching pair. There are $\binom{n}{2r}$ ways to select $2r$ points from $n$
+pairs. But, with each pair that we select, we could either choose the left
+or the right shoe. So, there are $2$ ways to choose each $2r$ pairs, so
+$2^{2r}$ ways to choose within the styles of the $2r$ points we selected.
+
+Combine these, and we get
+
+$$\binom{n}{2r} \frac{2^{2r}}{\binom{2n}{2r}}$$
+
+}
+
+\exercise[]{
+\textbf{(a) In a draft lottery containing the 366 days of the year, what is the
+probability that the first 180 days (without replacement) are evenly distributed
+among the 12 months?}
+
+Having $180$ days evenly distributed among the $12$ months mean that there should
+be $15$ days picked per month. The probability is then
+
+$$\frac{\binom{31}{15}\binom{29}{15}\cdots \binom{30}{15}\binom{31}{15}}
+       {\binom{366}{180}} \approx 1.67\times 10^{-8}$$
+
+\textbf{(b) What is the probability that the first 30 days contain none from
+September?}
+
+The no-September probability is just the section of the sample space in which
+we distribute the 30 days into the days that aren't September. This is given by
+
+$$\frac{\binom{336}{30}}{\binom{366}{30}}$$
+
+}
+
+\exercise[]{
+\textbf{Two people toss a fair coin $n$ times. Find the probability that they
+will toss the same number of heads.}
+
+The probability that for a single toss, both coins show up heads is $\frac{1}{4}$.
+There are $2n$ total coin tosses and $n$ paired events. This can be modeled as a
+binomial distribution with $p = \frac{1}{4}$ and $k = n$. Thus, the probability
+is
+
+$$\binom{2n}{n} (\frac{1}{4})^n$$
+
+}
+
+\exercise[]{
+\textbf{Two players, A and B alternatively and independently flip a coin and the
+first player to obtain a head wins. Assume player A flips first. \\
+(a) If the coin is fair, what's the probability that A wins?}
+
+Let $p = \frac{1}{2}$. The probability that player A will win is the sum of the
+probabilities that A will win on each of his/her tosses. For the first toss, there's
+a $p$ chance of winning right off the bat. Then the other player goes, and there's
+a $p$ chance that player B will win. For player A to win on their second turn means
+that the first two tosses have to be tails and the third one a heads. Formally,
+
+$$P(A wins on third toss) = (1 - p) \times (1 - p) \times p$$
+
+If we follow this pattern, we can see that generally:
+
+$$P(A wins on toss i) = (1 - p)^{2i} p$$
+
+The probability of A winning at any point in the game is the sum of these
+probabilities:
+
+\begin{align}
+    P(A wins) & = \sum_{i=0}^{\infty} P(A wins on toss i) \\
+              & = \sum_{i=1}^{\infty} (1 - p)^{2i} p \\
+              & = \frac{1}{2 - p}
+\end{align}
+
+Plugging in $p = \frac{1}{2}$, we see that
+
+$$P(A wins | p = \frac{1}{2}) = \frac{1}{2 - \frac{1}{2}} = \frac{2}{3}$$
+
+\textbf{(b) Suppose that $P(head) = p$, not $\frac{1}{2}$}
+
+We derived this in the previous section, and it is given by
+
+$$P(A wins | p) = \frac{1}{2 - p}$$
+
+\textbf{(c) Show that for all $p$, $0 < p < 1$, $P(A wins) > \frac{1}{2}$.}
+
+Looking at the expression above makes it obvious. As we increase $p$ from $0$
+to $1$, we decrease the denominator while maintaining the numerator, thus making
+the value larger. The minimum occurs at $p = 0$, which would give us $\frac{1}{2}$.
+
+}
+
+\exercise[]{
+\textbf{The Smiths.}
+}
+
+\exercise[]{
+\textbf{A fair die is cast until a $6$ appears. What is the probability that
+it must be cast more than $5$ times?}
+
+This can be modeled as a negative binomial. Let $p = \frac{1}{6}$, $r = 1$, and
+$k = 5$. The negative binomial is given by
+
+\begin{align}
+    NB(k, p, r) & = \binom{k+r-1}{k} (1 - p)^r p^k \\
+                & = \binom{5}{5} (1 - \frac{1}{6})^1 (\frac{1}{6})^5 \\
+                & = (1 - \frac{1}{6})(\frac{1}{6})^5
+\end{align}
+
+The questions asks the probability that it must be cast more than $5$ times. This
+can be modeled as
+
+\begin{align}
+    P(rolls > 5) & = 1 - P(rolls <= 5) \\
+                 & = 1 - \sum_{i=1}^5 NB(i, \frac{5}{6}, 1) \\
+                 & = 1 - 0.1389 - 0.1157 - 0.0965 - 0.0804 - 0.0670 \\
+                 & = 0.502
+\end{align}
+
+}
+
+\exercise[]{
+\textbf{Verify the following identities.}
+}
+
+\exercise[]{
+\textbf{Sterling's Formula.}
+}
+
+\exercise[]{
+\textbf{(a) For the situation in Example 1.2.20, enumerate the ordered
+samples that make up the unordered samples $\left \{ 4, 4, 12, 12 \right \}$
+and $\left \{ 2, 9, 9, 12 \right \}$.}
+
+I'm showing them below as a matrix. This is just for readability.
+
+The ordered samples of $\left \{ 4, 4, 12, 12 \right \}$ are:
+
+\begin{align}
+    \begin{bmatrix}
+        (4, & 4, & 12, & 12) \\ 
+        (4, & 12, & 4, & 12) \\ 
+        (4, & 12, & 12, & 4) \\
+        (12, & 4, & 12, & 4) \\ 
+        (12, & 12, & 4, & 4) \\
+        (12, & 4, & 4, & 12) 
+    \end{bmatrix}
+\end{align}
+
+The ordered samples of $\left \{ 2, 9, 9, 12 \right \}$ are:
+
+\begin{align}
+    \begin{bmatrix}
+        (2, & 9, & 9, & 12) \\
+        (2, & 9, & 12, & 9) \\
+        (2, & 12, & 9, & 9) \\
+        (12, & 2, & 9, & 9) \\
+        (12, & 9, & 2, & 9) \\
+        (12, & 9, & 9, & 2) \\
+        (9, & 12, & 9, & 2) \\
+        (9, & 12, & 2, & 9) \\
+        (9, & 2, & 12, & 9) \\
+        (9, & 2, & 9, & 12)
+    \end{bmatrix}
+\end{align}
+
+\textbf{(c) Suppose that we had a collection of six numbers,
+$\left \{ 1, 2, 7, 8, 14, 20 \right \}$. What is the probability of drawing,
+with replacement, the unordered sample $\left \{ 2, 7, 7, 8, 14, 14 \right \}$?}
+
+Sampling $6$ numbers with replacement from a space of $6$ elements results in
+$6^6 = 46656$ total samples. So, the probability is $\frac{1}{46656}$.
+
+\textbf{(d) Verify that an unordered sample of size $k$, from $m$ different
+numbers repeated $k_1, k_2, ..., k_m$ times has $\frac{k!}{k_1!k_2!\cdots k_m!}$
+ordered components, where $k_1 + k_2 + \cdots + k_m = k$.}
+
+There are $k!$ ways to permute a list of $k$ elements. If an element is repeated,
+however, there is no meaningful distinction between a permutation and a combination
+of the repeated elements. So, for any permutation of the larger list, there are a
+number of ways to permute the given list that isn't meaningful.
+
+Consider the list $\left \{ 1, 2, 2, 5, 7 \right \}$. There are $5! = 120$ ways
+to permute this list. But, we are double counting some, because it is differentiating
+between the two $2$s, which it shouldn't be. For example,
+$\left \{ 2, 1, 2, 5, 7 \right \}$ is distinct from
+$\left \{ 2, 1, 2, 5, 7 \right \}$, with the $2$s are swapped. For each permutation,
+we will be multi-counting. How many times will we be multicounting? We will be
+overcounting by the number of ways you can permute two $2$s. This is $2! = 2$ ways.
+So, the total number of actual permutations is $\frac{5!}{2!} = 60$ permutations.
+
+If $2$ was instead repeated $4$ times, then for each permutation in the list, we
+would be overcounting by the number of ways to permute a list of $4$ elements
+($4!$). In general, an element repeated $k_i$ times can be permuted $k_i!$ times.
+
+So, the number of permutations for a sample size of $k$, from $m$ different
+numbers repeated $k_1, k_2, ..., k_m$ times has
+
+$$\frac{k!}{k_1!k_2!\cdots k_m!}$$
+
+permutations.
+
+}
+
+\exerciseshere
